@@ -69,8 +69,9 @@ export function lookupRiskPolicy(input: RiskPolicyLookupInput): RiskPolicyLookup
     );
   }
 
-  // --- HITL trigger (task 5.3): any regulated data type forces human review
-  const hitlRequired = regulated.length > 0;
+  // --- HITL trigger (task 5.3): regulated data types or cross-client governance
+  // constraints force human review before architecture signoff.
+  const hitlRequired = regulated.length > 0 || crossClient;
   let reviewReason: string | undefined;
   if (hitlRequired) {
     const parts: string[] = [];
@@ -81,7 +82,9 @@ export function lookupRiskPolicy(input: RiskPolicyLookupInput): RiskPolicyLookup
     if (hasPii) parts.push("PII handling requirements apply to personal data in scope");
     if (hasRfd)
       parts.push("financial data governance requirements apply (regulated financial data)");
-    reviewReason = `Regulated data in scope (${input.data_classification.join(", ")}) requires human-in-the-loop review before architecture signoff: ${parts.join("; ")}`;
+    if (crossClient)
+      parts.push("cross-client governance requires human review for tenant data isolation signoff");
+    reviewReason = `Human-in-the-loop review required before architecture signoff: ${parts.join("; ")}`;
   }
 
   return {

@@ -8,7 +8,7 @@
  */
 import type { FastMCP } from "fastmcp";
 import { z } from "zod";
-import { norm } from "../data/loader.js";
+import { norm, overlapRatio } from "../data/loader.js";
 import type {
   ToolSelectionLookupInput,
   ToolSelectionLookupOutput,
@@ -216,12 +216,6 @@ const PLATFORMS: PlatformProfile[] = [
     strength: "Analytics-first cloud — serverless and streaming primitives with Cloud DLP",
   },
 ];
-
-const overlapRatio = (input: string[], tags: string[]): number => {
-  if (input.length === 0) return 0;
-  const tagSet = new Set(tags.map(norm));
-  return input.filter((v) => tagSet.has(norm(v))).length / input.length;
-};
 
 function score(input: ToolSelectionLookupInput, p: PlatformProfile): number {
   const stack = 2.0 * overlapRatio(input.data_stack, p.stackTags);

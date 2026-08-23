@@ -23,7 +23,14 @@ const DATA_DIR = join(ROOT, "data");
 /** Normalize a tag for matching: "BigQuery" / " bigquery " -> "bigquery". */
 export const norm = (s: string): string => s.trim().toLowerCase();
 
-function walk(dir: string): string[] {
+/** Overlap ratio: fraction of input items found in tags (both normalized). */
+export const overlapRatio = (input: string[], tags: string[]): number => {
+  if (input.length === 0) return 0;
+  const tagSet = new Set(tags.map(norm));
+  return input.filter((v) => tagSet.has(norm(v))).length / input.length;
+};
+
+export function walk(dir: string): string[] {
   return readdirSync(dir).flatMap((entry) => {
     const full = join(dir, entry);
     return statSync(full).isDirectory() ? walk(full) : [full];
@@ -39,7 +46,12 @@ function parseFrontmatter(raw: string): {
 } {
   const m = raw.match(/^---\n([\s\S]*?)\n---\n?/);
   if (!m) return { fm: {}, body: raw };
-  const parsed = (parse(m[1] ?? "") ?? {}) as Record<string, unknown>;
+  let parsed: Record<string, unknown> = {};
+  try {
+    parsed = (parse(m[1] ?? "") ?? {}) as Record<string, unknown>;
+  } catch {
+    // Malformed YAML — treat as no frontmatter, keep body.
+  }
   return { fm: parsed, body: raw.slice(m[0].length) };
 }
 

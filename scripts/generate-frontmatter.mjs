@@ -320,7 +320,8 @@ function resolve(relPath, body) {
   }
 
   const ogField = (key) => {
-    const m = rawFm.match(new RegExp(`^${key}:\\s*(.+)$`, "m"));
+    const escKey = key.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&");
+    const m = rawFm.match(new RegExp(`^${escKey}:\\s*(.+)$`, "m"));
     if (!m) return null;
     let v = m[1].trim();
     // strip up to two quote layers: normal YAML quoting, plus corruption from earlier

@@ -7,9 +7,10 @@
  *
  * Usage: node --import tsx scripts/validate-source-pack.ts
  */
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { parse } from "yaml";
+import { walk } from "../src/data/loader.js";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DATA_DIR = join(ROOT, "data");
@@ -22,13 +23,6 @@ const REQUIRED_BY_TYPE: Record<string, string[]> = {
 
 // Files that declare a pattern_id must also carry the full demo-pattern definition.
 const PATTERN_DEF_FIELDS = ["pattern_id", "architecture_summary", "recommended_components"];
-
-function walk(dir: string): string[] {
-  return readdirSync(dir).flatMap((entry) => {
-    const full = join(dir, entry);
-    return statSync(full).isDirectory() ? walk(full) : [full];
-  });
-}
 
 const mdFiles = walk(DATA_DIR).filter((f) => f.endsWith(".md"));
 let errors = 0;

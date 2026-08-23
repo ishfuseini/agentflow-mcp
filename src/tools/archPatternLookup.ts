@@ -9,7 +9,7 @@
  */
 import type { FastMCP } from "fastmcp";
 import { z } from "zod";
-import { loadSourcePack, norm } from "../data/loader.js";
+import { loadSourcePack, norm, overlapRatio } from "../data/loader.js";
 import type {
   ArchPatternLookupInput,
   ArchPatternLookupOutput,
@@ -39,13 +39,6 @@ export const FALLBACK_PATTERN: ArchPatternLookupOutput = {
     "Route regulated or low-confidence outputs through human review",
   ],
   confidence: FALLBACK_CONFIDENCE_CAP,
-};
-
-const overlapRatio = (input: string[], tags: string[]): number => {
-  if (input.length === 0) return 0;
-  const tagSet = new Set(tags.map(norm));
-  const hit = input.filter((v) => tagSet.has(norm(v))).length;
-  return hit / input.length;
 };
 
 /** Score one pattern entry against the input. Returns raw score components. */

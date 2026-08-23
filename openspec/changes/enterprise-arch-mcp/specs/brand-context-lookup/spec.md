@@ -81,7 +81,7 @@ The system SHALL return a JSON object containing company_name, domain, industry_
 
 ### Requirement: API key via environment variable
 
-The system SHALL read the Brandfetch API key from the `BRANDFETCH_API_KEY` environment variable for Brand Context API calls. The logo.dev client does not require an API key for basic logo retrieval.
+The system SHALL read the Brandfetch API key from the `BRANDFETCH_API_KEY` environment variable for Brand Context API calls, and the logo.dev secret key from `LOGO_DEV_SECRET_KEY` for logo retrieval.
 
 #### Scenario: API key present
 

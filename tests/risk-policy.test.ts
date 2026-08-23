@@ -71,7 +71,7 @@ test("non-sensitive data does not trigger HITL", () => {
   assert.equal(out.review_reason, undefined);
 });
 
-test("cross-client governance adds tenant isolation and risk flag", () => {
+test("cross-client governance adds tenant isolation, risk flag, and HITL", () => {
   const out = lookupRiskPolicy({
     industry: "media_agency",
     data_classification: ["non-sensitive"],
@@ -82,6 +82,8 @@ test("cross-client governance adds tenant isolation and risk flag", () => {
   assert.ok(out.required_controls.includes("tenant isolation"));
   assert.ok(out.risk_flags.includes("cross-client data separation"));
   assert.ok(out.required_controls.includes("EU region data pinning"));
+  assert.equal(out.hitl_required, true);
+  assert.match(out.review_reason ?? "", /cross-client/);
 });
 
 test("every response includes required schema fields", () => {

@@ -122,7 +122,7 @@ export async function lookupBrandContext(
   }
 
   // Layer 1: fresh local cache — zero API cost.
-  const cachedEntry = readCache(domain);
+  const cachedEntry = await readCache(domain);
   if (cachedEntry && isFresh(cachedEntry)) {
     return withCacheFlag(cachedEntry.output, true);
   }
@@ -168,7 +168,7 @@ export async function lookupBrandContext(
   };
   output.confidence = scoreConfidence(output);
 
-  writeCache(domain, output);
+  await writeCache(domain, output);
   return output;
 }
 
