@@ -276,6 +276,73 @@ gcloud secrets create logo-dev-publishable-key --data-file=<(echo -n "$LOGO_DEV_
 
 See `app.yaml` and `.gcloudignore` for the full configuration.
 
+### CI/CD via GitHub Actions
+
+A GitHub Actions workflow (`.github/workflows/deploy-appengine.yml`) auto-deploys to App Engine on push to `main`. It builds the TypeScript, optionally warms the brand cache, and deploys using `gcloud app deploy`.
+
+**One-time GCP setup** (Workload Identity Federation — no long-lived keys):
+
+```bash
+PROJECT_ID=ishfdev-agentflow
+SA_NAME=github-actions-deploy
+
+# 1. Create a dedicated service account
+gcloud iam service-accounts create $SA_NAME \
+  --project=$PROJECT_ID
+SA_EMAIL="$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com"
+
+# 2. Grant deployment permissions
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$SA_EMAIL" \
+  --role="roles/appengine.appAdmin"
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$SA_EMAIL" \
+  --role="roles/storage.objectAdmin"
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$SA_EMAIL" \
+  --role="roles/cloudbuild.builds.editor"
+
+# 3. Create Workload Identity pool and provider
+POOL_ID="github-actions"
+PROVIDER_ID="github"
+
+gcloud iam workload-identity-pools create $POOL_ID \
+  --project=$PROJECT_ID \
+  --location="global"
+
+gcloud iam workload-identity-pools providers create-oidc $PROVIDER_ID \
+  --project=$PROJECT_ID \
+  --location="global" \
+  --workload-identity-pool=$POOL_ID \
+  --issuer-uri="https://token.actions.githubusercontent.com" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository"
+
+# 4. Allow the GitHub repo to impersonate the service account
+REPO_FULL="ishfuseini/agentflow-mcp"
+PROVIDER_FULL="projects/$PROJECT_ID/locations/global/workloadIdentityPools/$POOL_ID/providers/$PROVIDER_ID"
+
+gcloud iam service-accounts add-iam-policy-binding $SA_EMAIL \
+  --project=$PROJECT_ID \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="principalSet://iam.googleapis.com/$PROVIDER_FULL;attribute.repository/$REPO_FULL"
+
+# 5. Print the provider resource name (set as GitHub secret)
+echo "GCP_WIF_PROVIDER: $PROVIDER_FULL"
+echo "GCP_SA_EMAIL: $SA_EMAIL"
+```
+
+Then add these as **GitHub repository secrets** (Settings → Secrets and variables → Actions):
+
+| Secret | Value |
+|---|---|
+| `GCP_WIF_PROVIDER` | `projects/ishfdev-agentflow/locations/global/workloadIdentityPools/github-actions/providers/github` |
+| `GCP_SA_EMAIL` | `github-actions-deploy@ishfdev-agentflow.iam.gserviceaccount.com` |
+| `BRANDFETCH_API_KEY` | Your Brandfetch API key (optional, for cache warming) |
+| `LOGO_DEV_SECRET_KEY` | Your logo.dev secret key (optional) |
+| `LOGO_DEV_PUBLISHABLE_KEY` | Your logo.dev publishable key (optional) |
+
+Once set up, every push to `main` triggers a deploy. You can also trigger manually via the Actions tab → "Run workflow".
+
 ## Scripts
 
 | Script | Purpose |

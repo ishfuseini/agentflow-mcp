@@ -1,0 +1,49 @@
+name: Deploy to App Engine
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Warm brand cache (optional)
+        env:
+          BRANDFETCH_API_KEY: ${{ secrets.BRANDFETCH_API_KEY }}
+          LOGO_DEV_SECRET_KEY: ${{ secrets.LOGO_DEV_SECRET_KEY }}
+          LOGO_DEV_PUBLISHABLE_KEY: ${{ secrets.LOGO_DEV_PUBLISHABLE_KEY }}
+        run: npx tsx scripts/brand-cache-warm.ts
+        continue-on-error: true
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy to App Engine
+        run: gcloud app deploy app.yaml --quiet
+        env:
+          CLOUDSDK_CORE_PROJECT: ishfdev-agentflow
