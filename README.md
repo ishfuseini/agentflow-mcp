@@ -235,6 +235,28 @@ docker build -t agentflow-mcp .
 docker run -p 8080:8080 agentflow-mcp
 ```
 
+### Fly.io
+
+Simplest deployment path — no IAM setup, deploys your Dockerfile directly:
+
+```bash
+# Install Fly CLI (if not already)
+curl -L https://fly.io/install.sh | sh
+
+# Create the app (one-time)
+fly launch --no-deploy
+
+# Set secrets
+fly secrets set BRANDFETCH_API_KEY=your-key-here
+fly secrets set LOGO_DEV_SECRET_KEY=your-key-here
+fly secrets set LOGO_DEV_PUBLISHABLE_KEY=your-key-here
+
+# Deploy
+fly deploy
+```
+
+`fly.toml` is already configured: Node 22 Docker image, HTTP transport on port 8080, scale-to-zero when idle. The MCP endpoint will be at `https://agentflow-mcp.fly.dev/mcp`.
+
 ### GCP Cloud Run
 
 ```bash
