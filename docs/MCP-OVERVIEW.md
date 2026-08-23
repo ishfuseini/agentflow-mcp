@@ -2,14 +2,14 @@
 
 ## What This Is
 
-A self-hosted MCP server (`enterprise-arch-mcp`) that acts as an internal architecture reference brain for enterprise AI POC scoping. Built with FastMCP + TypeScript, deployed on GCP Cloud Run.
+A self-hosted MCP server (`agentflow-mcp`) that acts as an internal architecture reference brain for enterprise AI POC scoping. Built with FastMCP + TypeScript, deployed on GCP Cloud Run.
 
 The MCP receives company, industry, data stack, cloud, and governance constraints, then returns recommended architecture patterns, tool selections, risks, and POC success criteria. It is the **knowledge layer** — not the reasoning layer. The agents in the agentflow pipeline do the reasoning; the MCP grounds that reasoning in curated enterprise patterns.
 
 ## Role in the agentflow Demo
 
 ```
-agentflow pipeline                          enterprise-arch-mcp
+agentflow pipeline                          agentflow-mcp
 ┌──────────────────────┐                   ┌───────────────────────┐
 │  Qualifier Agent     │                   │  arch_pattern_lookup   │
 │  - clarifies the ask │   ── no MCP calls ─│  tool_selection_lookup │
@@ -174,8 +174,8 @@ logo.dev does not require an API key for basic logo retrieval.
 
 | Concern | Lives in | Why |
 |---------|----------|-----|
-| Architecture patterns, tool data, risk policies | enterprise-arch-mcp (source pack) | It's the knowledge layer |
-| MCP tool implementations | enterprise-arch-mcp (src/) | Tools expose the knowledge |
+| Architecture patterns, tool data, risk policies | agentflow-mcp (source pack) | It's the knowledge layer |
+| MCP tool implementations | agentflow-mcp (src/) | Tools expose the knowledge |
 | Agent system prompts | agentflow project | Prompts define agent behavior, which is pipeline concern |
 | Architecture-diagram skill | agentflow project | The skill renders diagrams, which is presentation, not knowledge |
 | HITL gate logic | agentflow project | The gate is pipeline orchestration |
