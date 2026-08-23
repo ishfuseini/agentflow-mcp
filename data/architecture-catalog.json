@@ -1,0 +1,540 @@
+[
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/aws/solutions-governance-on-aws.md",
+    "source_url": "https://aws.amazon.com/architecture/management-governance/",
+    "title": "Management & Governance | AWS Architecture Center x facebook linkedin instagram twitch youtube podcasts email California Consumer Privacy Act (CCPA) Opt-Out Icon",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "aws",
+    "description": "Learn architecture best practices for enabling, provisioning, and operating your AWS environment for both business agility and governance control."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/aws/hipaa-compliance.md",
+    "source_url": "https://aws.amazon.com/compliance/hipaa-compliance/",
+    "title": "HIPAA Compliance - Amazon Web Services (AWS) x facebook linkedin instagram twitch youtube podcasts email California Consumer Privacy Act (CCPA) Opt-Out Icon",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "aws",
+    "description": "Entities subject to HIPAA compliance can use AWS to process, maintain, and store protected health information. Learn how AWS can help your business."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/azure/health-data-services.md",
+    "source_url": "https://azure.microsoft.com/en-us/products/health-data-services/",
+    "title": "Azure Health Data Services | Microsoft Azure Your Privacy Choices Opt-Out Icon Your Privacy Choices Opt-Out Icon",
+    "scraped_at": "2026-08-23T13:00:07Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "Azure Health Data Services is a suite of purpose-built technologies for protected health information (PHI) in the cloud."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/hipaa-compliance.md",
+    "source_url": "https://cloud.google.com/security/compliance/hipaa",
+    "title": "HIPAA Compliance on Google Cloud | GCP Security",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": ""
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/healthcare-life-sciences.md",
+    "source_url": "https://cloud.google.com/solutions/healthcare-life-sciences",
+    "title": "Cloud for Healthcare and Life Sciences (HCLS) | Google Cloud",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Accelerate research and transform the patient experience with cloud and AI services for healthcare. Explore solutions from Google Cloud."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/marketing-analytics.md",
+    "source_url": "https://cloud.google.com/solutions/marketing-analytics",
+    "title": "Marketing Analytics & AI Solutions | Google Cloud",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Google Cloud can help bring marketing and business data together to maximize marketing ROI, break down data silos and innovate with AI. Learn more."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/data-residency.md",
+    "source_url": "https://cloud.google.com/terms/data-residency",
+    "title": "Google Cloud Platform Services Data Residency | Google Cloud",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Google Cloud services with Data Residency that may be configured for data location pursuant to Service Specific Terms."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/databricks/sso.md",
+    "source_url": "https://community.databricks.com/t5/technical-blog/how-sso-works-with-databricks-and-your-identity-provider-a/ba-p/41021",
+    "title": "How SSO works with Databricks and your Identity Pr... - Databricks Community - 41021",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "databricks",
+    "description": "What is Single Sign-On (SSO)? The rise of Software as a Service (Saas) has proliferated the adoption of specialized software in todays modern world. This resulted in enterprises adopting many Saas ser…"
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/databricks/ai-agents.md",
+    "source_url": "https://community.databricks.com/t5/technical-blog/how-to-combine-ai-agents-and-audience-segmentation-in-databricks/ba-p/117955",
+    "title": "How to Combine AI Agents and Audience Segmentation... - Databricks Community - 117955",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "databricks",
+    "description": "The Problem: What is missing from traditional audience segmentation? Audience segmentation has long been crucial for marketing, grouping customers into distinct profiles based on shared demographics, …"
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/aws/pii.md",
+    "source_url": "https://docs.aws.amazon.com/comprehend/latest/dg/how-pii.html",
+    "title": "Detecting PII entities - Amazon Comprehend Detecting PII entities - Amazon Comprehend",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "aws",
+    "description": "Learn about locating and redacting Personally Identifiable Information (PII)."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/aws/data-residency.md",
+    "source_url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-aws-semicon-workloads/meeting-data-residency-requirements.html",
+    "title": "Meeting data residency requirements on AWS - AWS Prescriptive Guidance Meeting data residency requirements on AWS - AWS Prescriptive Guidance",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "aws",
+    "description": "Review AWS capabilities to help semiconductor companies address data residency and security classification requirements."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/aws/solutions-governance-on-aws.md",
+    "source_url": "https://docs.aws.amazon.com/solutions/governance-on-aws/",
+    "title": "",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "aws",
+    "description": ""
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/aws/retail-and-commerce-media-monetization-on-aws.md",
+    "source_url": "https://docs.aws.amazon.com/solutions/retail-and-commerce-media-monetization-on-aws/",
+    "title": "",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "aws",
+    "description": ""
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/aws/retail-personalization-on-aws.md",
+    "source_url": "https://docs.aws.amazon.com/solutions/retail-personalization-on-aws/",
+    "title": "",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "aws",
+    "description": ""
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/aws/well-architected-framework.md",
+    "source_url": "https://docs.aws.amazon.com/wellarchitected/latest/financial-services-industry-lens/financial-services-industry-lens.html",
+    "title": "Financial Services Industry Lens - AWS Well-Architected Framework - Financial Services Industry Lens Financial Services Industry Lens - AWS Well-Architected Framework - Financial Services Industry Lens",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "aws",
+    "description": "This document describes the Financial Services Industry Lens for the AWS Well-Architected Framework. The document describes general design principles, as well as specific best practices and guidance for the six pillars of the Well-Architected Framework."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/aws/healthcare-analytics-reference-architecture.md",
+    "source_url": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/healthcare-analytics-reference-architecture.html",
+    "title": "Healthcare analytics reference architecture - Healthcare Industry Lens Healthcare analytics reference architecture - Healthcare Industry Lens",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "aws",
+    "description": "Examples of healthcare analytics architecture."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/big-data-analytics.md",
+    "title": "Big data and analytics resources | Cloud Architecture Center | Google Cloud Documentation",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Architecture guides for big data and analytics workloads in Google Cloud."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/blueprints/security-foundations/authentication-authorization.md",
+    "source_url": "https://docs.cloud.google.com/architecture/blueprints/security-foundations/authentication-authorization",
+    "title": "Authentication and authorization | Cloud Architecture Center | Google Cloud Documentation",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Introduces how to use Cloud Identity to manage identities for accessing Google Cloud services."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/blueprints/security-foundations/authorization.md",
+    "source_url": "https://docs.cloud.google.com/architecture/de-identification-re-identification-pii-using-cloud-dlp",
+    "title": "De-identification and re-identification of PII in large-scale datasets using Sensitive Data Protection | Cloud Architecture Center | Google Cloud Documentation",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Discusses how to use Sensitive Data Protection to create an automated data transformation pipeline to de-identify sensitive data like personally identifiable information (PII)."
+  },
+  {
+    "source_url": "https://docs.cloud.google.com/architecture/framework/perspectives/fsi",
+    "title": "Well-Architected Framework: Financial services (FS) perspective | Cloud Architecture Center | Google Cloud Documentation",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Provides principles and recommendations to help you to design, build, and manage financial services (FS) applications in Google Cloud that meet your operational, security, reliability, cost, and performance goals."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/genai-product-recommendations.md",
+    "source_url": "https://docs.cloud.google.com/architecture/genai-product-recommendations",
+    "title": "Generative AI use case: Generate personalized product recommendations | Cloud Architecture Center | Google Cloud Documentation",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Use AI to generate personalized product recommendations for a retail application."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/gemini-enterprise-agent-platform/machine-learning.md",
+    "source_url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/machine-learning",
+    "title": "Introduction to machine learning on Gemini Enterprise Agent Platform | Google Cloud Documentation",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Learn about the machine learning capabilities on Gemini Enterprise Agent Platform, including managed datasets, serverless training, and model management."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/gcp/lakehouse/docs/key-concepts.md",
+    "source_url": "https://docs.cloud.google.com/lakehouse/docs/key-concepts",
+    "title": "Key concepts | Lakehouse | Google Cloud Documentation",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Definitions of key Lakehouse for Apache Iceberg concepts, including catalog types, table management modes, and security features."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/databricks/aws/en/lakehouse-architecture/reference.md",
+    "source_url": "https://docs.databricks.com/aws/en/lakehouse-architecture/reference",
+    "title": "Databricks reference architectures (download) | Databricks on AWS",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "databricks",
+    "description": "Downloadable Databricks reference architectures (11x17 PDFs) showing data sources, ingestion, transformation, processing, serving, analytics, and storage."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/databricks/aws/en/security/privacy/hipaa.md",
+    "source_url": "https://docs.databricks.com/aws/en/security/privacy/hipaa",
+    "title": "HIPAA | Databricks on AWS",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "databricks",
+    "description": "Learn about HIPAA compliance controls, including the compliance security profile, BAA requirements, and responsibilities for processing PHI data."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/databricks/gcp/en/lakehouse-architecture/data-governance/best-practices.md",
+    "source_url": "https://docs.databricks.com/gcp/en/lakehouse-architecture/data-governance/best-practices",
+    "title": "Best practices for data and AI governance | Databricks on Google Cloud",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "databricks",
+    "description": "Best practices for data and AI governance on Databricks: unify management with Unity Catalog, control access, catalog and share data, and monitor data quality."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/snowflake/en/user-guide/snowflake-cortex/redact-pii.md",
+    "source_url": "https://docs.snowflake.com/en/en/user-guide/snowflake-cortex/redact-pii",
+    "title": "Detect and redact personally identifiable information (PII) | Snowflake Documentation",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": ""
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/snowflake/en/user-guide/admin-security-fed-auth-overview.md",
+    "source_url": "https://docs.snowflake.com/en/user-guide/admin-security-fed-auth-overview",
+    "title": "Overview of federated authentication and SSO | Snowflake Documentation",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": ""
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/duckduckgo.com/?q=azure+data+residency+architecture&ia=web",
+    "source_url": "https://duckduckgo.com/?q=azure+data+residency+architecture&ia=web",
+    "title": "azure data residency architecture at DuckDuckGo",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "duckduckgo",
+    "description": "DuckDuckGo. Privacy, Simplified."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/github.com/aggressivedeveloper/retail-gcp-data-lakehouse",
+    "source_url": "https://github.com/aggressivedeveloper/retail-gcp-data-lakehouse",
+    "title": "GitHub - aggressivedeveloper/retail-gcp-data-lakehouse: End-to-end GCP data engineering project for retail analytics using PySpark, Airflow, Dataproc, BigQuery, Cloud Storage, ETL/ELT, star schema, data governance, and security. · GitHub",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "End-to-end GCP data engineering project for retail analytics using PySpark, Airflow, Dataproc, BigQuery, Cloud Storage, ETL/ELT, star schema, data governance, and security. - aggressivedeveloper/retail-gcp-data-lakehouse"
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/github.com/srinathreddykota523/snowflake-retail-lakehouse",
+    "source_url": "https://github.com/srinathreddykota523/snowflake-retail-lakehouse",
+    "title": "GitHub - srinathreddykota523/snowflake-retail-lakehouse · GitHub",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Contribute to srinathreddykota523/snowflake-retail-lakehouse development by creating an account on GitHub."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/how-to/redact-text-pii",
+    "source_url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/how-to/redact-text-pii",
+    "title": "Identify and extract Personally Identifiable Information (PII) from text - Foundry Tools | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "This article shows you how to identify, extract, and redact Personally Identifiable Information (PII) from text."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/azure/architecture/guide/multitenant/approaches/governance-compliance",
+    "source_url": "https://learn.microsoft.com/en-us/azure/architecture/guide/multitenant/approaches/governance-compliance",
+    "title": "Architectural Approaches for Governance and Compliance in Multitenant Solutions - Azure Architecture Center | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "Learn about governance and compliance approaches for multitenant solutions, including data sovereignty, access control, and regulatory standards."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/azure/architecture/guide/multitenant/approaches/identity",
+    "source_url": "https://learn.microsoft.com/en-us/azure/architecture/guide/multitenant/approaches/identity",
+    "title": "Architectural Approaches for Identity in Multitenant Solutions - Azure Architecture Center | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "This article covers identity management strategies for multitenant solutions, including authentication, authorization, federation, and security considerations."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/azure/architecture/identity/identity-get-started",
+    "source_url": "https://learn.microsoft.com/en-us/azure/architecture/identity/identity-get-started",
+    "title": "Get Started with Identity Architecture Design - Azure Architecture Center | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "Control access to your apps and data by designing and implementing an identity solution. Learn about resources with guidelines, best practices, and recommendations."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/analytics-service-bus",
+    "source_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/analytics-service-bus",
+    "title": "Real-Time Analytics with Azure Service Bus and Microsoft Fabric - Azure Architecture Center | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "Learn how to use Microsoft Fabric with Azure Service Bus for near real-time solutions at enterprise scale in production environments."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/small-medium-modern-data-platform",
+    "source_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/small-medium-modern-data-platform",
+    "title": "Modern Data Platform Architecture for SMBs - Azure Architecture Center | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "Use Microsoft Fabric and Azure Databricks to build a modern data platform architecture designed for small and medium businesses."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/azure/compliance/offerings/offering-hipaa-us",
+    "source_url": "https://learn.microsoft.com/en-us/azure/compliance/offerings/offering-hipaa-us",
+    "title": "HIPAA - Azure Compliance | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "Azure compliance offering for HIPAA."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/azure/databricks/lakehouse-architecture/reference",
+    "source_url": "https://learn.microsoft.com/en-us/azure/databricks/lakehouse-architecture/reference",
+    "title": "Databricks reference architectures (download) - Azure Databricks | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "Downloadable Databricks reference architectures (11x17 PDFs) showing data sources, ingestion, transformation, processing, serving, analytics, and storage."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/industry/financial-services/infra-governance-fsi",
+    "source_url": "https://learn.microsoft.com/en-us/industry/financial-services/infra-governance-fsi",
+    "title": "Infrastructure governance - Microsoft for Financial Services | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "Learn how your deployment can adhere to compliance standards and maintain consistency with the help of Azure Policy and Azure Landing Zones."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/learn.microsoft.com/en-us/industry/healthcare/architecture/overview",
+    "source_url": "https://learn.microsoft.com/en-us/industry/healthcare/architecture/overview",
+    "title": "Overview of Microsoft for Healthcare reference architectures - Microsoft for Healthcare reference architecture | Microsoft Learn",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "azure",
+    "description": "Learn more about architectures and ideas to use Azure and other Microsoft services for building efficient and reliable healthcare solutions."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/medium.com/google-cloud/implementing-data-products-on-google-data-lakehouse-architecture-df5c5f4cc07e",
+    "source_url": "https://medium.com/google-cloud/implementing-data-products-on-google-data-lakehouse-architecture-df5c5f4cc07e",
+    "title": "Medium Implementing Data Products on Google Data Lakehouse Architecture | by Jitendra Yadav | Google Cloud - Community | Medium",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Implementing Data Products on Google Data Lakehouse Architecture Authors: Mihaela Savastre, EMEA Data Analytics Solution Lead, Google Cloud Jitendra Yadav, Data & AI/ML Specialist, Google …"
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.data-flakes.dev/blog/enterprise-sso-architecture-snowflake-entraid/",
+    "source_url": "https://www.data-flakes.dev/blog/enterprise-sso-architecture-snowflake-entraid/",
+    "title": "Enterprise SSO Architecture: Integrating Snowflake with Microsoft EntraID • Data Flakes",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Comprehensive architectural guide to integrating Snowflake with Microsoft EntraID for enterprise SSO. Explores SAML vs OAuth2 patterns, security governance, network design considerations, and operational strategies for large-scale deployments."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.databricks.com/blog/2020/11/20/enforcing-column-level-encryption-and-avoiding-data-duplication-with-pii.html",
+    "source_url": "https://www.databricks.com/blog/2020/11/20/enforcing-column-level-encryption-and-avoiding-data-duplication-with-pii.html",
+    "title": "Column-Level Encryption & PII Protection | Databricks Blog",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "databricks",
+    "description": "Learn how Northwestern Mutual uses Databricks with Fernet encryption libraries, UDFs, and Databricks secrets to unobtrusively secure PII in Delta Lake."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.databricks.com/blog/multi-agent-approach-audience-intelligence",
+    "source_url": "https://www.databricks.com/blog/multi-agent-approach-audience-intelligence",
+    "title": "A multi-agent approach to audience intelligence | Databricks Blog",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "databricks",
+    "description": "The most popular programming language is now your natural language: how Agent Bricks and Genie democratize insights and help advertisers build better audiences."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.databricks.com/blog/what-is-lakehouse-for-retail",
+    "source_url": "https://www.databricks.com/blog/what-is-lakehouse-for-retail",
+    "title": "What is Lakehouse for Retail? | Databricks",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "databricks",
+    "description": "What is Lakehouse f"
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.databricks.com/resources/architectures/healthcare-patient-personalization-reference-architecture",
+    "source_url": "https://www.databricks.com/resources/architectures/healthcare-patient-personalization-reference-architecture",
+    "title": "Healthcare Patient Personalization Reference Architecture | Databricks",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "databricks",
+    "description": "This reference architecture is designed to personalize patient care journeys on the Databricks Data + AI Platform. Personalized patient engagement empowers healthcare organizations to ensure customers receive more meaningful interactions and promote better health outcomes."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.infometry.net/blog/snowflake/enterprise-genai-on-snowflake-architecture-patterns-for-secure-governed-large-language-models",
+    "source_url": "https://www.infometry.net/blog/snowflake/enterprise-genai-on-snowflake-architecture-patterns-for-secure-governed-large-language-models/",
+    "title": "Enterprise GenAI on Snowflake: Secure Architecture Guide",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Explore secure, governed GenAI architecture on Snowflake using native RAG, Cortex, and enterprise-grade AI governance."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/developers/guides/agentic-audience-analytics",
+    "source_url": "https://www.snowflake.com/en/developers/guides/agentic-audience-analytics/",
+    "title": "Agentic Audience Analytics for Media & Entertainment",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": ""
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/developers/guides/building-audiences-with-snowflake-cortex",
+    "source_url": "https://www.snowflake.com/en/developers/guides/building-audiences-with-snowflake-cortex/",
+    "title": "Building Audiences with Snowflake Cortex",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Build intelligent, industry-specific Cortex Agents for natural language audience building and customer analytics in Retail, Financial Services, and Gaming verticals."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/developers/guides/clinical-data-analysis-with-adam-and-sdtm-in-snowflake",
+    "source_url": "https://www.snowflake.com/en/developers/guides/clinical-data-analysis-with-adam-and-sdtm-in-snowflake/",
+    "title": "Clinical Data Analysis with ADaM and SDTM in Snowflake",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": ""
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/developers/guides/customer-journey-analytics-with-sequent",
+    "source_url": "https://www.snowflake.com/en/developers/guides/customer-journey-analytics-with-sequent/",
+    "title": "Customer Journey Analytics with Sequent™",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Build customer journey analytics with Snowflake and Sequent for path analysis, funnel metrics, and conversion optimization."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/developers/guides/distributed-medical-image-processing-with-monai",
+    "source_url": "https://www.snowflake.com/en/developers/guides/distributed-medical-image-processing-with-monai/",
+    "title": "Distributed Medical Image Processing with MONAI on Snowflake",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Build a medical image registration pipeline using MONAI on Snowflake with GPU acceleration and native model registry integration"
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/developers/guides/llm-assisted-medical-coding-extraction-for-healthcare",
+    "source_url": "https://www.snowflake.com/en/developers/guides/llm-assisted-medical-coding-extraction-for-healthcare/",
+    "title": "LLM Assisted Medical Coding Extraction for Healthcare in Snowflake",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Clinical coding is the task of transforming medical records, usually presented as free texts written by clinicians or as typed texts, into structured codes in a classification system like ICD-10. By completing this QuickStart guide, you will see how fine tuning alleviates the workload on physicians and medical coders, as we aim to advance the implementation of autonomous medical coding. This approach will not only ensure high accuracy and clinical specificity in Medical code extraction but also support various healthcare models paving the way for a more sustainable and effective healthcare environment."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/developers/guides/modern-lakehouse-analytics-on-snowflake",
+    "source_url": "https://www.snowflake.com/en/developers/guides/modern-lakehouse-analytics-on-snowflake/",
+    "title": "Intro to Lakehouse Analytics on Snowflake",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": ""
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/product/use-cases/lakehouse-analytics",
+    "source_url": "https://www.snowflake.com/en/product/use-cases/lakehouse-analytics/",
+    "title": "Lakehouse Analytics on Open Formats with no data movement",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Run enterprise-grade lakehouse analytics and AI on Apache Iceberg, Delta Lake, and Parquet data in place with Snowflake. No migration or re-architecture"
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/solutions/industries/financial-services/",
+    "source_url": "https://www.snowflake.com/en/solutions/industries/financial-services/",
+    "title": "AI Data Cloud for Financial Services | Snowflake",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Discover Snowflake's cloud for Financial Services - enable AI & ML, unlock regulatory reporting automation and real-time data analytics for risk management."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.snowflake.com/en/solutions/industries/healthcare-and-life-sciences/",
+    "source_url": "https://www.snowflake.com/en/solutions/industries/healthcare-and-life-sciences/",
+    "title": "AI Data Cloud for Healthcare & Life Sciences | Snowflake",
+    "scraped_at": "2026-08-23T12:59:57Z",
+    "architecture_type": "reference",
+    "vendor": "snowflake",
+    "description": "Discover Snowflake's cloud healthcare solutions to unify health data. Unlock AI in healthcare to accelerate innovation and improve patient outcomes."
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.tenable.com/blog/the-gcp-shared-responsibility-model-everything-you-need-to-know",
+    "source_url": "https://www.tenable.com/blog/the-gcp-shared-responsibility-model-everything-you-need-to-know",
+    "title": "The GCP Shared Responsibility Model - Tenable Cloud Security Facebook Google Plus Twitter LinkedIn YouTube RSS Menu Search Resource - Blog Resource - Webinar Resource - Report Resource - Event icons_066 icons_067 icons_068 icons_069 icons_070",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "What is the GCP Shared Responsibility Model and how security teams need to get started. Learn all the ins and outs here"
+  },
+  {
+    "file_path": "/Users/ishmusic/40-Workspace/demo/agentflow-mcp/data/vendors/www.xebia.com/blog/data-isolation-tenant-architecture-google-cloud-platform-gcp",
+    "source_url": "https://xebia.com/blog/data-isolation-tenant-architecture-google-cloud-platform-gcp/",
+    "title": "Data Isolation In Tenant Architecture On Google Cloud (GCP)",
+    "scraped_at": "2026-08-23T12:59:58Z",
+    "architecture_type": "reference",
+    "vendor": "gcp",
+    "description": "Xebia on designing GDPR-compliant multi-tenant data architectures on GCP, tenant isolation strategies, BigQuery partitioning, and GCS-based data deletion"
+  }
+]
