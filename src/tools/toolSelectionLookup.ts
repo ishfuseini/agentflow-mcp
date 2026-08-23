@@ -6,9 +6,10 @@
  * a recommendation with cloud fit, constraint-aware reasoning, and
  * alternatives with when-to-prefer rationale.
  */
-import type { FastMCP } from "fastmcp";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { norm, overlapRatio } from "../data/loader.js";
+import { withToolLogging } from "../logging/gelf.js";
 import type {
   ToolSelectionLookupInput,
   ToolSelectionLookupOutput,
@@ -284,20 +285,24 @@ export function lookupToolSelection(input: ToolSelectionLookupInput): ToolSelect
   };
 }
 
-export function registerToolSelectionLookup(server: FastMCP): void {
-  server.addTool({
-    name: "tool_selection_lookup",
-    description:
-      "Recommend a data platform based on use case, data stack, constraints (HIPAA, PII, " +
-      "data residency, SSO/SAML), and latency needs — with cloud fit, reasoning, and alternatives.",
-    parameters: z.object({
-      use_case: z
-        .string()
-        .describe('What the enterprise wants to build, e.g. "AI-powered patient insights"'),
-      data_stack: z.array(z.string()).describe("Platforms/tools in play or under consideration"),
-      constraints: z.array(z.string()).describe("Governance/compliance constraints"),
-      latency: z.string().optional().describe("Latency need: batch or real-time"),
-    }),
-    execute: async (args: ToolSelectionLookupInput) => JSON.stringify(lookupToolSelection(args)),
-  });
+export function registerToolSelectionLookup(server: McpServer): void {
+  server.registerTool(
+    "tool_selection_lookup",
+    {
+      description:
+        "Recommend a data platform based on use case, data stack, constraints (HIPAA, PII, " +
+        "data residency, SSO/SAML), and latency needs — with cloud fit, reasoning, and alternatives.",
+      inputSchema: z.object({
+        use_case: z
+          .string()
+          .describe('What the enterprise wants to build, e.g. "AI-powered patient insights"'),
+        data_stack: z.array(z.string()).describe("Platforms/tools in play or under consideration"),
+        constraints: z.array(z.string()).describe("Governance/compliance constraints"),
+        latency: z.string().optional().describe("Latency need: batch or real-time"),
+      }),
+    },
+    withToolLogging("tool_selection_lookup", async (args: ToolSelectionLookupInput) => ({
+      content: [{ type: "text", text: JSON.stringify(lookupToolSelection(args)) }],
+    })),
+  );
 }

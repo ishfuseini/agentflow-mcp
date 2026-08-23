@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A self-hosted MCP server (`agentflow-mcp`) that acts as an internal architecture reference brain for enterprise AI POC scoping. Built with FastMCP + TypeScript, served over the HTTP (streamable HTTP) transport — deployed on Fly.io at `https://arch.ishlab.dev/mcp`.
+A self-hosted MCP server (`agentflow-mcp`) that acts as an internal architecture reference brain for enterprise AI POC scoping. Built with the MCP TypeScript SDK v2 + TypeScript, served over Streamable HTTP — deployed on Fly.io at `https://arch.ishlab.dev/mcp`.
 
 The MCP receives company, industry, data stack, cloud, and governance constraints, then returns recommended architecture patterns, tool selections, risks, and POC success criteria. It is the **knowledge layer** — not the reasoning layer. The agents in the agentflow pipeline do the reasoning; the MCP grounds that reasoning in curated enterprise patterns.
 

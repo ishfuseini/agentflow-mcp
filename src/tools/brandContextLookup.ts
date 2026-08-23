@@ -6,11 +6,12 @@
  * (even stale) or a graceful unavailable response, so a Brandfetch/logo.dev
  * outage never breaks the demo pipeline.
  */
-import type { FastMCP } from "fastmcp";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { isFresh, readCache, writeCache } from "../data/brandCache.js";
 import { fetchBrandContext } from "../data/brandfetchClient.js";
 import { fetchLogoDevBrand } from "../data/logoDevClient.js";
+import { withToolLogging } from "../logging/gelf.js";
 import type { BrandContextLookupInput, BrandContextLookupOutput } from "../types/brand-context.js";
 
 /** Accepts "havas.com", "https://www.havas.com/about" -> "havas.com". */
@@ -172,17 +173,20 @@ export async function lookupBrandContext(
   return output;
 }
 
-export function registerBrandContextLookup(server: FastMCP): void {
-  server.addTool({
-    name: "brand_context_lookup",
-    description:
-      "Retrieve company brand context (name, description, tags, positioning, brand voice/style, " +
-      "logo URL) for a resolved domain, from Brandfetch plus logo.dev. Serves cached data when " +
-      "the sources are unavailable. Resolve partial company names to a domain before calling.",
-    parameters: z.object({
-      domain: z.string().describe('Resolved company domain, e.g. "havas.com"'),
-    }),
-    execute: async (args: BrandContextLookupInput) =>
-      JSON.stringify(await lookupBrandContext(args)),
-  });
+export function registerBrandContextLookup(server: McpServer): void {
+  server.registerTool(
+    "brand_context_lookup",
+    {
+      description:
+        "Retrieve company brand context (name, description, tags, positioning, brand voice/style, " +
+        "logo URL) for a resolved domain, from Brandfetch plus logo.dev. Serves cached data when " +
+        "the sources are unavailable. Resolve partial company names to a domain before calling.",
+      inputSchema: z.object({
+        domain: z.string().describe('Resolved company domain, e.g. "havas.com"'),
+      }),
+    },
+    withToolLogging("brand_context_lookup", async (args: BrandContextLookupInput) => ({
+      content: [{ type: "text", text: JSON.stringify(await lookupBrandContext(args)) }],
+    })),
+  );
 }

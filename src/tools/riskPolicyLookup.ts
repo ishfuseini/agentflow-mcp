@@ -5,9 +5,10 @@
  * and human-in-the-loop triggers derived from industry, data classification,
  * region, deployment model, and governance constraints.
  */
-import type { FastMCP } from "fastmcp";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { norm } from "../data/loader.js";
+import { withToolLogging } from "../logging/gelf.js";
 import type { RiskPolicyLookupInput, RiskPolicyLookupOutput } from "../types/risk-policy.js";
 
 const REGULATED_TYPES = ["phi", "pii", "regulated financial data"] as const;
@@ -95,31 +96,35 @@ export function lookupRiskPolicy(input: RiskPolicyLookupInput): RiskPolicyLookup
   };
 }
 
-export function registerRiskPolicyLookup(server: FastMCP): void {
-  server.addTool({
-    name: "risk_policy_lookup",
-    description:
-      "Return required controls, risk flags, and human-in-the-loop triggers for an architecture " +
-      "based on industry, data classification (PHI, PII, regulated financial data), region, " +
-      "deployment model, and governance constraints.",
-    parameters: z.object({
-      industry: z
-        .string()
-        .describe("Industry, e.g. healthcare, financial_services, media_agency, retail"),
-      data_classification: z
-        .array(z.string())
-        .describe(
-          'Data classifications in scope, e.g. ["PHI", "PII"], ["regulated financial data"], ["non-sensitive"]',
-        ),
-      region: z.string().describe("Data region, e.g. US or EU"),
-      deployment: z.string().describe("Deployment model: cloud, on-prem, or hybrid"),
-      constraints: z
-        .array(z.string())
-        .optional()
-        .describe(
-          'Governance constraints from the architecture brief, e.g. ["cross-client governance", "EU data residency"]',
-        ),
-    }),
-    execute: async (args: RiskPolicyLookupInput) => JSON.stringify(lookupRiskPolicy(args)),
-  });
+export function registerRiskPolicyLookup(server: McpServer): void {
+  server.registerTool(
+    "risk_policy_lookup",
+    {
+      description:
+        "Return required controls, risk flags, and human-in-the-loop triggers for an architecture " +
+        "based on industry, data classification (PHI, PII, regulated financial data), region, " +
+        "deployment model, and governance constraints.",
+      inputSchema: z.object({
+        industry: z
+          .string()
+          .describe("Industry, e.g. healthcare, financial_services, media_agency, retail"),
+        data_classification: z
+          .array(z.string())
+          .describe(
+            'Data classifications in scope, e.g. ["PHI", "PII"], ["regulated financial data"], ["non-sensitive"]',
+          ),
+        region: z.string().describe("Data region, e.g. US or EU"),
+        deployment: z.string().describe("Deployment model: cloud, on-prem, or hybrid"),
+        constraints: z
+          .array(z.string())
+          .optional()
+          .describe(
+            'Governance constraints from the architecture brief, e.g. ["cross-client governance", "EU data residency"]',
+          ),
+      }),
+    },
+    withToolLogging("risk_policy_lookup", async (args: RiskPolicyLookupInput) => ({
+      content: [{ type: "text", text: JSON.stringify(lookupRiskPolicy(args)) }],
+    })),
+  );
 }

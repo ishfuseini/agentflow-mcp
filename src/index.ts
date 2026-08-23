@@ -3,14 +3,19 @@
  *
  * Registers all four tools. Transport is selected via MCP_TRANSPORT:
  * "stdio" (default, for local dev and MCP Inspector) or "http-stream"
- * (for GCP Cloud Run, listening on 0.0.0.0:$PORT, default 8080).
+ * (for Fly.io, listening on 0.0.0.0:$PORT, default 8080).
  *
- * Input validation (task 7.4) is enforced by FastMCP: every tool declares a
- * zod schema, and invalid or missing required fields are rejected with a
- * validation error before execute runs.
+ * Input validation is enforced by the official MCP TypeScript SDK v2
+ * (@modelcontextprotocol/server): every tool registers a zod Standard Schema
+ * (inputSchema), and invalid or missing required fields are rejected with a
+ * validation error before the handler runs.
  */
+import { createServer as createHttpServer } from "node:http";
 import { pathToFileURL } from "node:url";
-import { FastMCP } from "fastmcp";
+import { toNodeHandler } from "@modelcontextprotocol/node";
+import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
+import { serveStdio } from "@modelcontextprotocol/server/stdio";
+import { logGelf } from "./logging/gelf.js";
 import { registerArchPatternLookup } from "./tools/archPatternLookup.js";
 import { registerBrandContextLookup } from "./tools/brandContextLookup.js";
 import { registerRiskPolicyLookup } from "./tools/riskPolicyLookup.js";
@@ -20,8 +25,13 @@ try {
   process.loadEnvFile();
 } catch {}
 
-export function createServer(): FastMCP {
-  const server = new FastMCP({
+/**
+ * Build a fresh McpServer instance with all four tools registered.
+ * The stdio and HTTP serving entries call this as their per-connection /
+ * per-request factory, so no server state is shared between connections.
+ */
+export function createServer(): McpServer {
+  const server = new McpServer({
     name: "agentflow-mcp",
     version: "0.1.0",
   });
@@ -36,23 +46,44 @@ const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv
 
 if (isMain) {
   const transport = process.env.MCP_TRANSPORT ?? "stdio";
-  const server = createServer();
 
   if (transport === "http-stream") {
     const port = Number(process.env.PORT ?? 8080);
-    await server.start({
-      transportType: "httpStream",
-      // Stateless mode is REQUIRED for compatibility with standard MCP
-      // clients: their startup "probe" is a GET with no session ID, which a
-      // stateful mcp-proxy answers with 400 "No sessionId" (a fatal
-      // "version negotiation" error). In stateless mode the probe gets 405
-      // "Method Not Allowed", which every client explicitly tolerates. It
-      // also suits scale-to-zero deployments (Fly/Cloud Run) — no server-side
-      // session state to lose when instances spin down.
-      httpStream: { port, host: "0.0.0.0", stateless: true },
+    // createMcpHandler serves a fresh McpServer per request, so the endpoint
+    // is natively stateless — required for compatibility with standard MCP
+    // clients (their startup "probe" is a GET with no session ID) and suited
+    // to scale-to-zero deployments (Fly.io). This subsumes the
+    // FastMCP `stateless: true` httpStream workaround.
+    const handler = createMcpHandler(createServer);
+    const nodeHandler = toNodeHandler(handler);
+    const httpServer = createHttpServer((req, res) => {
+      nodeHandler(req, res);
     });
-    console.error(`agentflow-mcp listening on http://0.0.0.0:${port}/mcp`);
+    httpServer.on("error", (err) => {
+      const message = err instanceof Error ? err.message : String(err);
+      const stack = err instanceof Error ? (err.stack ?? err.message) : String(err);
+      console.error("http server error:", err);
+      logGelf({
+        shortMessage: "http server error",
+        level: "error",
+        fullMessage: stack,
+        fields: { transport: "http-stream", error: message },
+      });
+    });
+    httpServer.listen(port, "0.0.0.0", () => {
+      console.error(`agentflow-mcp listening on http://0.0.0.0:${port}/mcp`);
+      logGelf({
+        shortMessage: "agentflow-mcp started",
+        level: "info",
+        fields: { transport: "http-stream", port },
+      });
+    });
   } else {
-    await server.start({ transportType: "stdio" });
+    logGelf({
+      shortMessage: "agentflow-mcp started",
+      level: "info",
+      fields: { transport: "stdio" },
+    });
+    serveStdio(createServer);
   }
 }

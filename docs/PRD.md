@@ -207,10 +207,10 @@ The MCP should load static local files:
 
 
 # Tech Stack
-- FastMCP
+- MCP TypeScript SDK v2 (official)
 - TypeScript
 - Biome
-- GCP Cloud Run
+- Fly.io
 - architecture pattern lookup
 - curated MD/JSON source pack
 - optional Firecrawl-generated markdown inputs

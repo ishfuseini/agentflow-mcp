@@ -1,6 +1,6 @@
 # agentflow-mcp
 
-An enterprise architecture knowledge MCP server for the agentflow demo pipeline. Built with [FastMCP](https://github.com/punkpeye/fastmcp) + TypeScript, deployed on GCP Cloud Run.
+An enterprise architecture knowledge MCP server for the agentflow demo pipeline. Built with the [MCP TypeScript SDK v2](https://ts.sdk.modelcontextprotocol.io/v2/) + TypeScript, deployed on Fly.io.
 
 The server exposes four tools that ground an Architecture Agent and Risk Checker Agent in curated enterprise patterns rather than generic LLM reasoning:
 
@@ -56,7 +56,7 @@ MCP_TRANSPORT=http-stream PORT=8080 npm run dev
 # agentflow-mcp listening on http://0.0.0.0:8080/mcp
 ```
 
-The `http-stream` transport runs in **stateless mode** (hardcoded in `src/index.ts`). This is required for compatibility with standard MCP clients: their startup "probe" is a `GET` with no session ID, which a stateful server answers with `400 No sessionId` (surfaced by clients as a fatal "version negotiation failed" error). Stateless mode answers that probe with `405 Method Not Allowed` + `Allow: POST`, which every client explicitly tolerates. It also suits scale-to-zero deployments (Fly / Cloud Run) — no server-side session state to lose when instances spin down.
+The `http-stream` transport runs in **stateless mode** (hardcoded in `src/index.ts`). This is required for compatibility with standard MCP clients: their startup "probe" is a `GET` with no session ID, which a stateful server answers with `400 No sessionId` (surfaced by clients as a fatal "version negotiation failed" error). Stateless mode answers that probe with `405 Method Not Allowed` + `Allow: POST`, which every client explicitly tolerates. It also suits scale-to-zero deployments (Fly.io) — no server-side session state to lose when instances spin down.
 
 ### Run Tests
 
@@ -77,7 +77,8 @@ Copy `.env.example` to `.env` and fill in the keys. Only `brand_context_lookup` 
 | `LOGO_DEV_PUBLISHABLE_KEY` | `brand_context_lookup` | Publishable key for logo.dev CDN URLs |
 | `MCP_TRANSPORT` | Server | `stdio` (default) or `http-stream` |
 | `PORT` | Server | HTTP port (default 8080, used when transport is `http-stream`) |
-| `FASTMCP_STATELESS` | Server | Optional: set `true` to force stateless `http-stream` mode (already enabled in code) |
+| `GRAYLOG_GELF_URL` | Server | Graylog GELF HTTP input URL (e.g. `http://graylog:12201/gelf`); enables Graylog logging when set |
+| `GRAYLOG_SOURCE` | Server | Source name for Graylog messages (default `agentflow-mcp`) |
 
 When API keys are missing, `brand_context_lookup` returns cached responses for cached domains or a graceful unavailable response for uncached domains. The other three tools continue to function normally.
 
@@ -262,47 +263,6 @@ fly deploy
 
 Note: the server runs `http-stream` in **stateless mode** — do not switch it back to stateful, or standard MCP clients will fail their startup probe with "version negotiation failed" (see [HTTP transport](#http-transport-streamable-http)).
 
-### GCP Cloud Run
-
-```bash
-gcloud run deploy agentflow-mcp \
-  --source . \
-  --region run.googleapis.com \
-  --port 8080 \
-  --set-env-vars "MCP_TRANSPORT=http-stream" \
-  --set-secrets "BRANDFETCH_API_KEY=brandfetch-api-key:latest,LOGO_DEV_SECRET_KEY=logo-dev-secret-key:latest,LOGO_DEV_PUBLISHABLE_KEY=logo-dev-publishable-key:latest"
-```
-
-See `cloud-run.yaml` for the full service configuration. The service runs `http-stream` in stateless mode, so scale-to-zero instances are safe (no client sessions are stored server-side).
-
-### Google App Engine
-
-App Engine Standard doesn't run a build step — compile locally first, then deploy:
-
-```bash
-npm run build          # compile src/ -> dist/
-
-# (Optional) Warm brand cache for demo domains before deploy
-npx tsx scripts/brand-cache-warm.ts
-
-gcloud app deploy      # deploys with dist/ and data/ included
-```
-
-`app.yaml` sets `MCP_TRANSPORT=http-stream` and scales to zero when idle (cheaper for a demo). App Engine sets `PORT` automatically — the server already reads it. Stateless `http-stream` mode is enabled in code, so idle scaling is safe.
-
-For secrets, use Secret Manager:
-
-```bash
-# Create secrets
-gcloud secrets create brandfetch-api-key --data-file=<(echo -n "$BRANDFETCH_API_KEY")
-gcloud secrets create logo-dev-secret-key --data-file=<(echo -n "$LOGO_DEV_SECRET_KEY")
-gcloud secrets create logo-dev-publishable-key --data-file=<(echo -n "$LOGO_DEV_PUBLISHABLE_KEY")
-
-# Reference them in app.yaml (uncomment the includes: section)
-```
-
-See `app.yaml` and `.gcloudignore` for the full configuration.
-
 ## Scripts
 
 | Script | Purpose |
@@ -358,20 +318,20 @@ agentflow-mcp/
 ├── openspec/                        # OpenSpec specs (4 capabilities)
 │   ├── specs/                       # Main specs (synced from archived change)
 │   └── changes/archive/            # Archived change proposals
-├── Dockerfile                       # Multi-stage build for Cloud Run
-├── cloud-run.yaml                  # Cloud Run service config
+├── Dockerfile                       # Multi-stage build for Fly.io
+├── fly.toml                         # Fly.io app config
 └── package.json
 ```
 
 ## Tech Stack
 
 - **Runtime:** Node.js >= 20
-- **MCP framework:** [FastMCP](https://github.com/punkpeye/fastmcp) v4
+- **MCP framework:** [MCP TypeScript SDK v2](https://ts.sdk.modelcontextprotocol.io/v2/) (`@modelcontextprotocol/server` 2.x)
 - **Language:** TypeScript (strict)
 - **Validation:** Zod v4
 - **Linting/formatting:** Biome
 - **Testing:** Node.js built-in test runner
-- **Deployment:** Docker + GCP Cloud Run
+- **Deployment:** Docker + Fly.io
 
 ## OpenSpec
 

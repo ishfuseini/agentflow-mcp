@@ -7,9 +7,10 @@
  * references; weak matches fall back to a generic enterprise AI POC pattern
  * with confidence < 0.5 and no diagram.
  */
-import type { FastMCP } from "fastmcp";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { loadSourcePack, norm, overlapRatio } from "../data/loader.js";
+import { withToolLogging } from "../logging/gelf.js";
 import type {
   ArchPatternLookupInput,
   ArchPatternLookupOutput,
@@ -133,26 +134,30 @@ export function lookupArchPattern(input: ArchPatternLookupInput): ArchPatternLoo
   };
 }
 
-export function registerArchPatternLookup(server: FastMCP): void {
-  server.addTool({
-    name: "arch_pattern_lookup",
-    description:
-      "Match an enterprise ask (industry, data stack, cloud, constraints) to a curated " +
-      "reference architecture pattern with components, data zones, integration notes, " +
-      "confidence, and diagram-ready data.",
-    parameters: z.object({
-      industry: z
-        .string()
-        .describe("Industry code, e.g. media_agency, healthcare, retail, financial_services"),
-      data_stack: z
-        .array(z.string())
-        .describe('Candidate platforms/tools, e.g. ["BigQuery", "Snowflake"]'),
-      cloud: z.string().optional().describe("Cloud preference, e.g. GCP, AWS, Azure"),
-      constraints: z
-        .array(z.string())
-        .describe('Governance/compliance constraints, e.g. ["SAML SSO", "EU data residency"]'),
-      latency: z.string().optional().describe("Latency expectation: batch or real-time"),
-    }),
-    execute: async (args: ArchPatternLookupInput) => JSON.stringify(lookupArchPattern(args)),
-  });
+export function registerArchPatternLookup(server: McpServer): void {
+  server.registerTool(
+    "arch_pattern_lookup",
+    {
+      description:
+        "Match an enterprise ask (industry, data stack, cloud, constraints) to a curated " +
+        "reference architecture pattern with components, data zones, integration notes, " +
+        "confidence, and diagram-ready data.",
+      inputSchema: z.object({
+        industry: z
+          .string()
+          .describe("Industry code, e.g. media_agency, healthcare, retail, financial_services"),
+        data_stack: z
+          .array(z.string())
+          .describe('Candidate platforms/tools, e.g. ["BigQuery", "Snowflake"]'),
+        cloud: z.string().optional().describe("Cloud preference, e.g. GCP, AWS, Azure"),
+        constraints: z
+          .array(z.string())
+          .describe('Governance/compliance constraints, e.g. ["SAML SSO", "EU data residency"]'),
+        latency: z.string().optional().describe("Latency expectation: batch or real-time"),
+      }),
+    },
+    withToolLogging("arch_pattern_lookup", async (args: ArchPatternLookupInput) => ({
+      content: [{ type: "text", text: JSON.stringify(lookupArchPattern(args)) }],
+    })),
+  );
 }
