@@ -1,0 +1,36 @@
+# Google App Engine configuration for agentflow-mcp.
+#
+# Deploy:
+#   npm run build          # compile src/ -> dist/ (App Engine Standard doesn't build for you)
+#   gcloud app deploy      # deploys with dist/ and data/ included
+#
+# App Engine Standard automatically sets PORT. The server reads it and
+# listens on 0.0.0.0:$PORT. MCP_TRANSPORT must be set to "http-stream"
+# so the server uses HTTP transport instead of stdio.
+#
+# Secrets:
+#   For production, use Secret Manager instead of plaintext env vars:
+#     gcloud secrets create brandfetch-api-key --data-file=<(echo -n "$KEY")
+#   then add to includes here:
+#     includes:
+#       - brandfetch-api-key: BRANDFETCH_API_KEY
+
+runtime: nodejs20
+env: standard
+
+env_variables:
+  MCP_TRANSPORT: "http-stream"
+  # Set API keys via gcloud or Secret Manager (see includes: above)
+  # BRANDFETCH_API_KEY: "..."
+  # LOGO_DEV_SECRET_KEY: "..."
+  # LOGO_DEV_PUBLISHABLE_KEY: "..."
+
+automatic_scaling:
+  min_instances: 0       # scale to zero when idle (cheaper for demo)
+  max_instances: 3       # cap cost; MCP calls are lightweight
+
+# App Engine Standard request timeout defaults to 60s.
+# Brandfetch live resolution can take 15-30s, so default is fine.
+# If you see timeouts, increase via:
+#   gcloud app deploy --version v2 --no-promote
+# and test before promoting.
