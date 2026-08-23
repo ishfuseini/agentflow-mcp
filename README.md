@@ -248,6 +248,34 @@ gcloud run deploy agentflow-mcp \
 
 See `cloud-run.yaml` for the full service configuration.
 
+### Google App Engine
+
+App Engine Standard doesn't run a build step — compile locally first, then deploy:
+
+```bash
+npm run build          # compile src/ -> dist/
+
+# (Optional) Warm brand cache for demo domains before deploy
+npx tsx scripts/brand-cache-warm.ts
+
+gcloud app deploy      # deploys with dist/ and data/ included
+```
+
+`app.yaml` sets `MCP_TRANSPORT=http-stream` and scales to zero when idle (cheaper for a demo). App Engine sets `PORT` automatically — the server already reads it.
+
+For secrets, use Secret Manager:
+
+```bash
+# Create secrets
+gcloud secrets create brandfetch-api-key --data-file=<(echo -n "$BRANDFETCH_API_KEY")
+gcloud secrets create logo-dev-secret-key --data-file=<(echo -n "$LOGO_DEV_SECRET_KEY")
+gcloud secrets create logo-dev-publishable-key --data-file=<(echo -n "$LOGO_DEV_PUBLISHABLE_KEY")
+
+# Reference them in app.yaml (uncomment the includes: section)
+```
+
+See `app.yaml` and `.gcloudignore` for the full configuration.
+
 ## Scripts
 
 | Script | Purpose |
