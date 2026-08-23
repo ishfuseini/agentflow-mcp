@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A self-hosted MCP server (`agentflow-mcp`) that acts as an internal architecture reference brain for enterprise AI POC scoping. Built with FastMCP + TypeScript, deployed on GCP Cloud Run.
+A self-hosted MCP server (`agentflow-mcp`) that acts as an internal architecture reference brain for enterprise AI POC scoping. Built with FastMCP + TypeScript, served over the HTTP (streamable HTTP) transport — deployed on Fly.io at `https://arch.ishlab.dev/mcp`.
 
 The MCP receives company, industry, data stack, cloud, and governance constraints, then returns recommended architecture patterns, tool selections, risks, and POC success criteria. It is the **knowledge layer** — not the reasoning layer. The agents in the agentflow pipeline do the reasoning; the MCP grounds that reasoning in curated enterprise patterns.
 
@@ -167,8 +167,8 @@ logo.dev does not require an API key for basic logo retrieval.
 
 ### Deployment
 
-- **Remote**: GCP Cloud Run, HTTP transport
-- **Local**: stdio transport for development and MCP Inspector testing
+- **Remote**: Fly.io, HTTP transport — endpoint `https://arch.ishlab.dev/mcp`
+- **Local**: HTTP transport (`MCP_TRANSPORT=http-stream`) for development; stdio also available for MCP Inspector
 
 ## What Belongs Where
 

@@ -42,7 +42,14 @@ if (isMain) {
     const port = Number(process.env.PORT ?? 8080);
     await server.start({
       transportType: "httpStream",
-      httpStream: { port, host: "0.0.0.0" },
+      // Stateless mode is REQUIRED for compatibility with standard MCP
+      // clients: their startup "probe" is a GET with no session ID, which a
+      // stateful mcp-proxy answers with 400 "No sessionId" (a fatal
+      // "version negotiation" error). In stateless mode the probe gets 405
+      // "Method Not Allowed", which every client explicitly tolerates. It
+      // also suits scale-to-zero deployments (Fly/Cloud Run) — no server-side
+      // session state to lose when instances spin down.
+      httpStream: { port, host: "0.0.0.0", stateless: true },
     });
     console.error(`agentflow-mcp listening on http://0.0.0.0:${port}/mcp`);
   } else {

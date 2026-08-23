@@ -49,12 +49,14 @@ npm install
 npm run dev          # stdio transport (local dev + MCP Inspector)
 ```
 
-### HTTP transport (Cloud Run)
+### HTTP transport (streamable HTTP)
 
 ```bash
 MCP_TRANSPORT=http-stream PORT=8080 npm run dev
 # agentflow-mcp listening on http://0.0.0.0:8080/mcp
 ```
+
+The `http-stream` transport runs in **stateless mode** (hardcoded in `src/index.ts`). This is required for compatibility with standard MCP clients: their startup "probe" is a `GET` with no session ID, which a stateful server answers with `400 No sessionId` (surfaced by clients as a fatal "version negotiation failed" error). Stateless mode answers that probe with `405 Method Not Allowed` + `Allow: POST`, which every client explicitly tolerates. It also suits scale-to-zero deployments (Fly / Cloud Run) — no server-side session state to lose when instances spin down.
 
 ### Run Tests
 
@@ -75,6 +77,7 @@ Copy `.env.example` to `.env` and fill in the keys. Only `brand_context_lookup` 
 | `LOGO_DEV_PUBLISHABLE_KEY` | `brand_context_lookup` | Publishable key for logo.dev CDN URLs |
 | `MCP_TRANSPORT` | Server | `stdio` (default) or `http-stream` |
 | `PORT` | Server | HTTP port (default 8080, used when transport is `http-stream`) |
+| `FASTMCP_STATELESS` | Server | Optional: set `true` to force stateless `http-stream` mode (already enabled in code) |
 
 When API keys are missing, `brand_context_lookup` returns cached responses for cached domains or a graceful unavailable response for uncached domains. The other three tools continue to function normally.
 
@@ -255,7 +258,9 @@ fly secrets set LOGO_DEV_PUBLISHABLE_KEY=your-key-here
 fly deploy
 ```
 
-`fly.toml` is already configured: Node 22 Docker image, HTTP transport on port 8080, scale-to-zero when idle. The MCP endpoint will be at `https://agentflow-mcp.fly.dev/mcp`.
+`fly.toml` is already configured: Node 22 Docker image, HTTP transport on port 8080, scale-to-zero when idle. The MCP endpoint will be at `https://agentflow-mcp.fly.dev/mcp` (or a custom domain such as `https://arch.ishlab.dev/mcp`).
+
+Note: the server runs `http-stream` in **stateless mode** — do not switch it back to stateful, or standard MCP clients will fail their startup probe with "version negotiation failed" (see [HTTP transport](#http-transport-streamable-http)).
 
 ### GCP Cloud Run
 
@@ -268,7 +273,7 @@ gcloud run deploy agentflow-mcp \
   --set-secrets "BRANDFETCH_API_KEY=brandfetch-api-key:latest,LOGO_DEV_SECRET_KEY=logo-dev-secret-key:latest,LOGO_DEV_PUBLISHABLE_KEY=logo-dev-publishable-key:latest"
 ```
 
-See `cloud-run.yaml` for the full service configuration.
+See `cloud-run.yaml` for the full service configuration. The service runs `http-stream` in stateless mode, so scale-to-zero instances are safe (no client sessions are stored server-side).
 
 ### Google App Engine
 
@@ -283,7 +288,7 @@ npx tsx scripts/brand-cache-warm.ts
 gcloud app deploy      # deploys with dist/ and data/ included
 ```
 
-`app.yaml` sets `MCP_TRANSPORT=http-stream` and scales to zero when idle (cheaper for a demo). App Engine sets `PORT` automatically — the server already reads it.
+`app.yaml` sets `MCP_TRANSPORT=http-stream` and scales to zero when idle (cheaper for a demo). App Engine sets `PORT` automatically — the server already reads it. Stateless `http-stream` mode is enabled in code, so idle scaling is safe.
 
 For secrets, use Secret Manager:
 

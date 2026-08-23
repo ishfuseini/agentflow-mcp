@@ -26,6 +26,12 @@ env:
 # For an HTTP health endpoint, add a lightweight handler — the MCP /mcp
 # endpoint responds to GET with 405 (only POST is accepted), which Cloud Run
 # treats as "container is up". No custom health endpoint is needed for the POC.
+#
+# Transport: the server runs http-stream in STATELESS mode (hardcoded in
+# src/index.ts). This is required — a stateful server answers client startup
+# probes (GET with no session id) with 400 "No sessionId", which clients
+# report as "version negotiation failed". Stateless answers 405, which all
+# clients tolerate, and is safe with scale-to-zero.
 
 # Concurrency: MCP tool calls are lightweight; default 80 is fine.
 # Memory: 512 MiB is sufficient for the source pack + brand cache.
