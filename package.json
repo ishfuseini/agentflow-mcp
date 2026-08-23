@@ -30,6 +30,8 @@
     "zod": "^4.4.3"
   },
   "allowScripts": {
-    "tldjs@2.3.2": true
+    "tldjs@2.3.2": true,
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true
   }
 }
