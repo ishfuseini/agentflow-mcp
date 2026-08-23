@@ -79,7 +79,7 @@ The Architect Agent passes `diagram_data` to the architecture-diagram skill (whi
 
 **Behavior**: Retrieves rich company context from two sources:
 1. **Brandfetch Brand Context API** — identity (tagline, mission, description, tags), positioning (value proposition, target audience, products & services), brand voice/style attributes. API key via `BRANDFETCH_API_KEY` env var. 100 requests/month free tier.
-2. **logo.dev** — company logo URL (`GET https://api.logo.dev/v1/logo?domain={domain}`). No API key required for basic retrieval.
+2. **logo.dev** — company logo URL (`GET https://api.logo.dev/brand/{domain}`). Uses `LOGO_DEV_SECRET_KEY` for authentication.
 
 Both responses are cached locally (file cache with TTL + Brandfetch `cachedOnly=true` mode for pre-populated domains). When either source is unavailable, the tool returns cached data or a graceful unavailable response — never a tool error.
 
