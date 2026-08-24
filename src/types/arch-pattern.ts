@@ -1,7 +1,8 @@
 /**
  * Input/output types for the arch_pattern_lookup tool (task 3.1).
+ * Returns core pattern fields only. diagram_data and source_references are
+ * provided by the dedicated arch_diagram and arch_pattern_references tools.
  */
-import type { DiagramData } from "./source.js";
 
 export interface ArchPatternLookupInput {
   /** Industry code, e.g. media_agency | healthcare | retail | financial_services */
@@ -16,7 +17,7 @@ export interface ArchPatternLookupInput {
   latency?: string;
 }
 
-/** Cites the source pack files that informed a match (task 3.6, P1). */
+/** Cites the source pack files that informed a match. */
 export interface SourceRef {
   path: string;
   title: string;
@@ -31,7 +32,4 @@ export interface ArchPatternLookupOutput {
   integration_notes: string[];
   /** 0-1; curated matches >= 0.85, fallback < 0.5 */
   confidence: number;
-  /** Included for curated matches only (confidence >= 0.85) */
-  diagram_data?: DiagramData;
-  source_references?: SourceRef[];
 }
