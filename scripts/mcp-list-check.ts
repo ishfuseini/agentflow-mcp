@@ -11,7 +11,15 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 
 const EXPECTED_TOOLS = process.argv.slice(2).length
   ? process.argv.slice(2)
-  : ["arch_pattern_lookup", "tool_selection_lookup", "risk_policy_lookup", "brand_context_lookup"];
+  : [
+      "arch_pattern_lookup",
+      "arch_diagram",
+      "arch_pattern_references",
+      "tool_selection_lookup",
+      "risk_policy_lookup",
+      "brand_context_lookup",
+      "brand_search",
+    ];
 
 const transport = new StdioClientTransport({
   command: process.execPath,

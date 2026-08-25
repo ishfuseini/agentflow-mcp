@@ -9,6 +9,7 @@ export interface ArchPatternReferencesInput {
   /** Pattern identifier, e.g. "media_agency_audience_measurement". */
   pattern_id: string;
   /** Original industry code used to find the match. */
+  industry: string;
   /** Original candidate platforms/tools used to find the match. */
   data_stack: string[];
   /** Original cloud preference used to find the match. */

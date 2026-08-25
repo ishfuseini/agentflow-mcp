@@ -25,32 +25,32 @@
 
 ## 5. arch_pattern_lookup Modifications
 
-- [ ] 5.1 Strip `source_references` and `diagram_data` from the default response in `src/tools/archPatternLookup.ts`. Verify: `tsc --noEmit` passes.
-- [ ] 5.2 Update `tests/arch-pattern.test.ts` to assert `source_references` and `diagram_data` are absent from the default response, while core fields (pattern_id, architecture_summary, recommended_components, data_zones, integration_notes, confidence) remain present. Verify: `npm test -- arch-pattern` passes.
+- [x] 5.1 Strip `source_references` and `diagram_data` from the default response in `src/tools/archPatternLookup.ts`. Verify: `tsc --noEmit` passes.
+- [x] 5.2 Update `tests/arch-pattern.test.ts` to assert `source_references` and `diagram_data` are absent from the default response, while core fields (pattern_id, architecture_summary, recommended_components, data_zones, integration_notes, confidence) remain present. Verify: `npm test -- arch-pattern` passes.
 
 ## 6. arch_diagram Tool
 
-- [ ] 6.1 Create `src/tools/archDiagramLookup.ts` exporting `registerArchDiagramLookup(server)` that loads the source pack, finds the `pattern_id`, and returns `diagram_data` (components, connections, boundaries). Verify: the tool is registered in `src/index.ts` and `tsc --noEmit` passes.
-- [ ] 6.2 Handle unknown `pattern_id` and fallback pattern with graceful unavailable/empty responses. Verify: a unit test for an unknown pattern_id returns an unavailable response without throwing.
+- [x] 6.1 Create `src/tools/archDiagramLookup.ts` exporting `registerArchDiagramLookup(server)` that loads the source pack, finds the `pattern_id`, and returns `diagram_data` (components, connections, boundaries). Verify: the tool is registered in `src/index.ts` and `tsc --noEmit` passes.
+- [x] 6.2 Handle unknown `pattern_id` and fallback pattern with graceful unavailable/empty responses. Verify: a unit test for an unknown pattern_id returns an unavailable response without throwing.
 
 ## 7. arch_pattern_references Tool
 
-- [ ] 7.1 Create `src/tools/archPatternReferencesLookup.ts` exporting `registerArchPatternReferencesLookup(server)` that re-runs scoring with the original ask inputs and returns `source_references` for the matched `pattern_id`. Verify: the tool is registered in `src/index.ts` and `tsc --noEmit` passes.
-- [ ] 7.2 Handle unknown `pattern_id` and fallback with empty/best-available references. Verify: a unit test for the fallback pattern returns best-available references without throwing.
+- [x] 7.1 Create `src/tools/archPatternReferencesLookup.ts` exporting `registerArchPatternReferencesLookup(server)` that re-runs scoring with the original ask inputs and returns `source_references` for the matched `pattern_id`. Verify: the tool is registered in `src/index.ts` and `tsc --noEmit` passes.
+- [x] 7.2 Handle unknown `pattern_id` and fallback with empty/best-available references. Verify: a unit test for the fallback pattern returns best-available references without throwing.
 
 ## 8. Tool Registration
 
-- [ ] 8.1 Register `brand_search`, `arch_diagram`, and `arch_pattern_references` in `src/index.ts` `createServer()` alongside the existing tools. Verify: `tsc --noEmit` passes and the server starts without error.
+- [x] 8.1 Register `brand_search`, `arch_diagram`, and `arch_pattern_references` in `src/index.ts` `createServer()` alongside the existing tools. Verify: `tsc --noEmit` passes and the server starts without error.
 
 ## 9. Tests
 
-- [ ] 9.1 Add `tests/brand-search.test.ts` covering exact match, suggest, no matches, missing API key, and API error. Verify: `npm test -- brand-search` passes.
-- [ ] 9.2 Add `tests/arch-diagram.test.ts` covering a curated pattern, the fallback pattern, and an unknown pattern_id. Verify: `npm test -- arch-diagram` passes.
-- [ ] 9.3 Add `tests/arch-pattern-references.test.ts` covering a curated pattern, the fallback pattern, and an unknown pattern_id. Verify: `npm test -- arch-pattern-references` passes.
-- [ ] 9.4 Run the full suite and verify all tests pass: `npm test`.
+- [x] 9.1 Add `tests/brand-search.test.ts` covering exact match, suggest, no matches, missing API key, and API error. Verify: `npm test -- brand-search` passes.
+- [x] 9.2 Add `tests/arch-diagram.test.ts` covering a curated pattern, the fallback pattern, and an unknown pattern_id. Verify: `npm test -- arch-diagram` passes.
+- [x] 9.3 Add `tests/arch-pattern-references.test.ts` covering a curated pattern, the fallback pattern, and an unknown pattern_id. Verify: `npm test -- arch-pattern-references` passes.
+- [x] 9.4 Run the full suite and verify all tests pass: `npm test`.
 
 ## 10. Validation
 
-- [ ] 10.1 Run `openspec validate make-tools-atomic` and verify it reports no spec/design/task inconsistencies. Verify: command exits 0.
-- [ ] 10.2 Run `tsc --noEmit` and verify the whole project type-checks. Verify: command exits 0.
-- [ ] 10.3 Run the server end-to-end and invoke each of the five tools independently (brand_search, brand_context_lookup, arch_pattern_lookup, arch_diagram, arch_pattern_references) to confirm the atomic contracts behave as specified. Verify: each tool returns its specified shape and no removed fields appear.
+- [x] 10.1 Run `openspec validate make-tools-atomic` and verify it reports no spec/design/task inconsistencies. Verify: command exits 0.
+- [x] 10.2 Run `tsc --noEmit` and verify the whole project type-checks. Verify: command exits 0.
+- [x] 10.3 Run the server end-to-end and invoke each of the five tools independently (brand_search, brand_context_lookup, arch_pattern_lookup, arch_diagram, arch_pattern_references) to confirm the atomic contracts behave as specified. Verify: each tool returns its specified shape and no removed fields appear.

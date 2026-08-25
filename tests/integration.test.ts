@@ -131,9 +131,10 @@ test("8.6 brand_context_lookup unavailable response schema compliance", async ()
   assert.ok(isStr(out.domain));
   assert.ok(isStr(out.industry_hint));
   assert.ok(isStrArr(out.tags));
-  assert.equal(out.positioning, null);
-  assert.equal(out.brand, null);
-  assert.equal(out.logo_url, null);
+  // removed fields must be absent, not null (atomic contract)
+  assert.ok(!("positioning" in out));
+  assert.ok(!("brand" in out));
+  assert.ok(!("logo_url" in out));
   assert.ok(isNum(out.confidence));
   assert.equal(out.confidence, 0);
   assert.ok(isStr(out.message));
