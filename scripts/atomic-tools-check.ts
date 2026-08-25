@@ -65,7 +65,7 @@ assert.equal(typeof brandContext.available, "boolean");
 assert.ok(!("logo_url" in brandContext), "FAIL: logo_url present");
 assert.ok(!("positioning" in brandContext), "FAIL: positioning present");
 assert.ok(!("brand" in brandContext), "FAIL: brand present");
-console.log(`PASS brand_context_lookup — available=${brandContext.available}, no removed fields`);
+console.log(`PASS brand_context_lookup — available=${String(brandContext.available)}, no removed fields`);
 
 // arch_pattern_lookup — core fields only
 const pattern = await call("arch_pattern_lookup", {
