@@ -79,7 +79,7 @@ assert.ok((pattern.confidence as number) >= 0.85);
 assert.ok(!("source_references" in pattern), "FAIL: source_references present");
 assert.ok(!("diagram_data" in pattern), "FAIL: diagram_data present");
 console.log(
-  `PASS arch_pattern_lookup — ${pattern.pattern_id} conf=${pattern.confidence}, core fields only`,
+  `PASS arch_pattern_lookup — ${String(pattern.pattern_id)} conf=${String(pattern.confidence)}, core fields only`,
 );
 
 // arch_diagram — full diagram_data for the matched pattern
