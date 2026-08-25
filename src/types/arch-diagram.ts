@@ -8,7 +8,10 @@ import type { DiagramData } from "./source.js";
 export interface ArchDiagramInput {
   /** Pattern identifier, e.g. "media_agency_audience_measurement". */
   pattern_id: string;
-  /** Optional data stack used to refine the diagram, e.g. ["BigQuery", "Snowflake"]. */
+  /**
+   * Optional data stack the diagram will be rendered for, e.g. ["BigQuery", "Snowflake"].
+   * Currently informational: the curated diagram_data is returned unmodified.
+   */
   data_stack?: string[];
 }
 

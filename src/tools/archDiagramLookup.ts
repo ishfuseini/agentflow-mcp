@@ -57,7 +57,10 @@ export function registerArchDiagramLookup(server: McpServer): void {
         data_stack: z
           .array(z.string())
           .optional()
-          .describe('Data stack to annotate the diagram with, e.g. ["BigQuery", "Snowflake"]'),
+          .describe(
+            'Data stack the diagram will be rendered for, e.g. ["BigQuery", "Snowflake"]. ' +
+              "Accepted for caller convenience; the curated diagram_data is returned unmodified.",
+          ),
       }),
     },
     withToolLogging("arch_diagram", (args: ArchDiagramInput) => ({
