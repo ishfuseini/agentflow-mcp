@@ -60,7 +60,7 @@ export function registerArchDiagramLookup(server: McpServer): void {
           .describe('Data stack to annotate the diagram with, e.g. ["BigQuery", "Snowflake"]'),
       }),
     },
-    withToolLogging("arch_diagram", async (args: ArchDiagramInput) => ({
+    withToolLogging("arch_diagram", (args: ArchDiagramInput) => ({
       content: [{ type: "text", text: JSON.stringify(lookupArchDiagram(args)) }],
     })),
   );
