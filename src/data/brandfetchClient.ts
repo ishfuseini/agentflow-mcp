@@ -2,7 +2,8 @@
  * Brandfetch Brand Context API client (task 6.2).
  *
  * GET {endpoint}/{domain} with Bearer BRANDFETCH_API_KEY and Accept: application/json.
- * The API returns snake_case JSON grouped into meta / identity / positioning / brand.
+ * The API returns snake_case JSON grouped into sections; only meta and identity
+ * are consumed (positioning and brand sections were removed from the contract).
  * With cachedOnly=true it responds 204 (never crawls) when nothing is cached,
  * which keeps latency low and avoids burning live resolutions.
  *

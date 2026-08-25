@@ -19,9 +19,9 @@
 
 ## 4. brand_context_lookup Modifications
 
-- [ ] 4.1 Remove the `logoDevClient` import and logo.dev call path from `src/tools/brandContextLookup.ts`; remove the `logo_url` field from the response. Verify: `tsc --noEmit` passes and no logo.dev call is made on a lookup.
-- [ ] 4.2 Remove `positioning` and `brand` (voice/style) from the `brandContextLookup` response mapping. Verify: a unit test asserts the response has no `positioning` or `brand` field.
-- [ ] 4.3 Update `tests/brand-context.test.ts`: remove logo server mocks, `logo_url` assertions, positioning assertions, and brand voice/style assertions; keep identity (company name, tagline, mission, description, tags) / industry_hint / cache assertions. Verify: `npm test -- brand-context` passes.
+- [x] 4.1 Remove the `logoDevClient` import and logo.dev call path from `src/tools/brandContextLookup.ts`; remove the `logo_url` field from the response. Verify: `tsc --noEmit` passes and no logo.dev call is made on a lookup.
+- [x] 4.2 Remove `positioning` and `brand` (voice/style) from the `brandContextLookup` response mapping. Verify: a unit test asserts the response has no `positioning` or `brand` field.
+- [x] 4.3 Update `tests/brand-context.test.ts`: remove logo server mocks, `logo_url` assertions, positioning assertions, and brand voice/style assertions; keep identity (company name, tagline, mission, description, tags) / industry_hint / cache assertions. Verify: `npm test -- brand-context` passes.
 
 ## 5. arch_pattern_lookup Modifications
 
