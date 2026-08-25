@@ -8,13 +8,9 @@
  *
  * Docs: https://docs.brandfetch.com/reference/brand-context-api
  */
-import type { BrandIdentityBlock, BrandPositioning } from "../types/brand-context.js";
-
 export interface RawBrandContext {
   meta: { domain: string; canonical_name: string; resolved_at: string };
   identity: { tagline: string; mission: string; description: string; tags: string[] };
-  positioning: BrandPositioning;
-  brand: BrandIdentityBlock;
 }
 
 export type BrandfetchResult =
@@ -57,7 +53,7 @@ export async function fetchBrandContext(
       return { status: "error", message: `Brandfetch returned HTTP ${res.status}` };
     }
     const context = (await res.json()) as RawBrandContext;
-    if (!context?.meta || !context.identity || !context.positioning || !context.brand) {
+    if (!context?.meta || !context.identity) {
       return { status: "error", message: "Brandfetch response missing required sections" };
     }
     return { status: "ok", context };

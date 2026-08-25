@@ -1,0 +1,68 @@
+/**
+ * Unit tests for the logo.dev Brand Search client (task 2.1).
+ *
+ * Uses a tiny loopback HTTP server so the real searchLogoDevBrands code path
+ * is exercised without hitting the real API.
+ */
+import assert from "node:assert/strict";
+import { createServer, type Server } from "node:http";
+import { after, before, test } from "node:test";
+import { searchLogoDevBrands } from "../src/data/logoDevClient.js";
+
+const SWEETGREEN = [
+  { name: "Sweetgreen", domain: "sweetgreen.com", logo_url: "https://img.logo.dev/sweetgreen.com" },
+  {
+    name: "Sweet Green",
+    domain: "sweetgreen.example",
+    logo_url: "https://img.logo.dev/sg.example",
+  },
+];
+
+let server: Server;
+let baseUrl: string;
+let lastQuery: URLSearchParams | null;
+
+before(async () => {
+  server = createServer((req, res) => {
+    lastQuery = new URL(req.url ?? "", "http://localhost").searchParams;
+    res.setHeader("content-type", "application/json");
+    res.end(JSON.stringify(SWEETGREEN));
+  });
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const addr = server.address();
+  if (!addr || typeof addr === "string") throw new Error("no address");
+  baseUrl = `http://127.0.0.1:${addr.port}`;
+});
+
+after(async () => {
+  delete process.env.LOGO_DEV_SEARCH_API_ENDPOINT;
+  delete process.env.LOGO_DEV_SECRET_KEY;
+  await new Promise((resolve) => server.close(resolve));
+});
+
+test("returns parsed candidates for Sweetgreen with strategy match", async () => {
+  process.env.LOGO_DEV_SEARCH_API_ENDPOINT = baseUrl;
+  process.env.LOGO_DEV_SECRET_KEY = "test-key";
+
+  const candidates = await searchLogoDevBrands("Sweetgreen", { strategy: "match" });
+
+  assert.ok(candidates);
+  assert.equal(candidates.length, 2);
+  assert.deepEqual(candidates[0], SWEETGREEN[0]);
+  assert.equal(candidates[0].name, "Sweetgreen");
+  assert.equal(candidates[0].domain, "sweetgreen.com");
+  assert.ok(candidates[0].logo_url.startsWith("https://img.logo.dev/"));
+  assert.equal(lastQuery?.get("q"), "Sweetgreen");
+  assert.equal(lastQuery?.get("strategy"), "match");
+});
+
+test("returns null without making a call when the key is missing", async () => {
+  process.env.LOGO_DEV_SEARCH_API_ENDPOINT = baseUrl;
+  delete process.env.LOGO_DEV_SECRET_KEY;
+  lastQuery = null;
+
+  const candidates = await searchLogoDevBrands("Sweetgreen");
+
+  assert.equal(candidates, null);
+  assert.equal(lastQuery, null);
+});

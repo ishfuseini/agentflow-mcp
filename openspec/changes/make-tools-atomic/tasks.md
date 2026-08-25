@@ -8,9 +8,9 @@
 
 ## 2. Data Clients
 
-- [ ] 2.1 Repurpose `src/data/logoDevClient.ts` from `/brand/{domain}` to `GET /search?q={name}&strategy={suggest|match}&is_profane={bool}` with Bearer `LOGO_DEV_SECRET_KEY`, returning `BrandSearchCandidate[]`. Verify: a unit test calling the client with a mocked fetch returns parsed candidates for "Sweetgreen" with strategy "match".
-- [ ] 2.2 Update `src/data/brandfetchClient.ts` to stop returning/forwarding `positioning` and `brand` data (neither field is no longer consumed). Verify: `tsc --noEmit` passes and the client still returns the identity section.
-- [ ] 2.3 Confirm `src/data/brandCache.ts` tolerates old cache entries (extra fields ignored on read) and stores the new `BrandContextLookupOutput` shape. Verify: a cache read of a pre-existing entry does not throw and a fresh write stores the slimmed shape.
+- [x] 2.1 Repurpose `src/data/logoDevClient.ts` from `/brand/{domain}` to `GET /search?q={name}&strategy={suggest|match}&is_profane={bool}` with Bearer `LOGO_DEV_SECRET_KEY`, returning `BrandSearchCandidate[]`. Verify: a unit test calling the client with a mocked fetch returns parsed candidates for "Sweetgreen" with strategy "match".
+- [x] 2.2 Update `src/data/brandfetchClient.ts` to stop returning/forwarding `positioning` and `brand` data (neither field is no longer consumed). Verify: `tsc --noEmit` passes and the client still returns the identity section.
+- [x] 2.3 Confirm `src/data/brandCache.ts` tolerates old cache entries (extra fields ignored on read) and stores the new `BrandContextLookupOutput` shape. Verify: a cache read of a pre-existing entry does not throw and a fresh write stores the slimmed shape.
 
 ## 3. brand_search Tool
 
