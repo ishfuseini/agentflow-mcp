@@ -1,10 +1,10 @@
 /**
- * Unit tests for brand_context_lookup (task 8.4): local cache hit, cache miss,
- * cachedOnly mode, Brandfetch-unavailable fallback, and logo.dev-unavailable
- * fallback (logo_url null but context returned).
+ * Unit tests for brand_context_lookup: local cache hit, cache miss,
+ * cachedOnly mode, Brandfetch-unavailable fallbacks, and the slimmed
+ * response contract (identity only — no logo_url, positioning, or brand).
  *
- * Uses tiny loopback HTTP servers so the real fetchBrandContext / fetchLogoDevBrand
- * code paths are exercised without hitting the real APIs.
+ * Uses a tiny loopback HTTP server so the real fetchBrandContext code path
+ * is exercised without hitting the real API.
  */
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -14,7 +14,7 @@ import { join } from "node:path";
 import { after, before, test } from "node:test";
 import { lookupBrandContext } from "../src/tools/brandContextLookup.js";
 
-// --- minimal valid Brandfetch Brand Context response (snake_case)
+// --- minimal valid Brandfetch Brand Context response (snake_case), identity only
 const RAW = {
   meta: {
     domain: "demo.com",
@@ -27,29 +27,15 @@ const RAW = {
     description: "A retail commerce and shopping company",
     tags: ["retail", "ecommerce", "consumer goods"],
   },
-  positioning: {
-    value_proposition: "We sell great products",
-    target_audience: [{ segment: "shoppers", description: "everyday consumers" }],
-    products_and_services: [{ name: "Store", type: "product", description: "online store" }],
-  },
-  brand: {
-    voice: { summary: "Friendly and direct", attributes: ["friendly"], avoid: ["rude"] },
-    style: { summary: "Clean and modern", attributes: ["clean"] },
-  },
 };
 
 interface MockState {
   brandfetchCalls: { domain: string; cachedOnly: boolean }[];
-  logoCalls: string[];
   cachedDomains: Set<string>;
   brandfetchLiveFail: boolean;
-  logoFail: boolean;
 }
 
 let brandfetchServer: Server;
-let logoServer: Server;
-let brandfetchUrl: string;
-let logoUrl: string;
 let state: MockState;
 const tmpDirs: string[] = [];
 
@@ -63,10 +49,8 @@ const freshCacheDir = (): string => {
 before(async () => {
   state = {
     brandfetchCalls: [],
-    logoCalls: [],
     cachedDomains: new Set(),
     brandfetchLiveFail: false,
-    logoFail: false,
   };
 
   brandfetchServer = createServer((req, res) => {
@@ -77,7 +61,7 @@ before(async () => {
       res.end();
       return;
     }
-    const domain = decodeURIComponent(match[1]);
+    const domain = decodeURIComponent(match[1] ?? "");
     const cachedOnly = url.searchParams.get("cachedOnly") === "true";
     state.brandfetchCalls.push({ domain, cachedOnly });
 
@@ -101,68 +85,51 @@ before(async () => {
     res.end(JSON.stringify({ ...RAW, meta: { ...RAW.meta, domain } }));
   });
 
-  logoServer = createServer((req, res) => {
-    const url = new URL(req.url ?? "/", "http://localhost");
-    const match = url.pathname.match(/^\/brand\/(.+)$/);
-    if (!match) {
-      res.writeHead(404);
-      res.end();
-      return;
-    }
-    const domain = decodeURIComponent(match[1]);
-    state.logoCalls.push(domain);
-    if (state.logoFail) {
-      res.writeHead(401);
-      res.end();
-      return;
-    }
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(
-      JSON.stringify({ name: "Demo Co", logo: `https://img.logo.dev/${domain}?token=pk_test` }),
-    );
-  });
-
   await new Promise<void>((r) => brandfetchServer.listen(0, "127.0.0.1", r));
-  await new Promise<void>((r) => logoServer.listen(0, "127.0.0.1", r));
 
   const bfAddr = brandfetchServer.address();
-  const lgAddr = logoServer.address();
-  brandfetchUrl = `http://127.0.0.1:${typeof bfAddr === "object" && bfAddr ? bfAddr.port : 0}/context`;
-  logoUrl = `http://127.0.0.1:${typeof lgAddr === "object" && lgAddr ? lgAddr.port : 0}/brand`;
-
   process.env.BRANDFETCH_API_KEY = "test-key";
-  process.env.LOGO_DEV_SECRET_KEY = "test-key";
-  process.env.BRANDFETCH_BRAND_CONTEXT_ENDPOINT = brandfetchUrl;
-  process.env.LOGO_DEV_BRAND_API_ENDPOINT = logoUrl;
+  process.env.BRANDFETCH_BRAND_CONTEXT_ENDPOINT = `http://127.0.0.1:${
+    typeof bfAddr === "object" && bfAddr ? bfAddr.port : 0
+  }/context`;
 });
 
 after(async () => {
   for (const d of tmpDirs) rmSync(d, { recursive: true, force: true });
+  delete process.env.BRANDFETCH_API_KEY;
+  delete process.env.BRANDFETCH_BRAND_CONTEXT_ENDPOINT;
   await new Promise<void>((r) => brandfetchServer.close(() => r()));
-  await new Promise<void>((r) => logoServer.close(() => r()));
 });
 
 const resetState = () => {
   state.brandfetchCalls = [];
-  state.logoCalls = [];
   state.cachedDomains.clear();
   state.brandfetchLiveFail = false;
-  state.logoFail = false;
 };
 
-test("cache miss populates local cache", async () => {
+/** The response must never carry the removed fields, whatever the source. */
+const assertSlimContract = (out: Record<string, unknown>) => {
+  assert.ok(!("logo_url" in out), "logo_url must not appear");
+  assert.ok(!("positioning" in out), "positioning must not appear");
+  assert.ok(!("brand" in out), "brand must not appear");
+};
+
+test("cache miss populates local cache and returns identity only", async () => {
   freshCacheDir();
   resetState();
   const out = await lookupBrandContext({ domain: "demo.com" });
   assert.equal(out.available, true);
   assert.equal(out.cached, false);
   assert.equal(out.company_name, "Demo Co");
+  assert.equal(out.tagline, "Build things");
+  assert.equal(out.mission, "Mission");
+  assert.equal(out.description, "A retail commerce and shopping company");
+  assert.deepEqual(out.tags, ["retail", "ecommerce", "consumer goods"]);
   assert.equal(out.industry_hint, "retail");
   assert.ok(out.confidence >= 0.8);
-  assert.ok(out.logo_url?.startsWith("https://img.logo.dev/"));
+  assertSlimContract(out as unknown as Record<string, unknown>);
   // a live call was made (cachedOnly missed first, then live succeeded)
   assert.ok(state.brandfetchCalls.some((c) => !c.cachedOnly));
-  assert.ok(state.logoCalls.length > 0);
 });
 
 test("local cache hit avoids API calls", async () => {
@@ -171,13 +138,12 @@ test("local cache hit avoids API calls", async () => {
   // first call populates
   await lookupBrandContext({ domain: "demo.com" });
   const bfBefore = state.brandfetchCalls.length;
-  const lgBefore = state.logoCalls.length;
   // second call should be served from cache
   const out = await lookupBrandContext({ domain: "demo.com" });
   assert.equal(out.available, true);
   assert.equal(out.cached, true);
   assert.equal(state.brandfetchCalls.length, bfBefore);
-  assert.equal(state.logoCalls.length, lgBefore);
+  assertSlimContract(out as unknown as Record<string, unknown>);
 });
 
 test("cachedOnly mode returns from Brandfetch cache without live resolution", async () => {
@@ -193,19 +159,20 @@ test("cachedOnly mode returns from Brandfetch cache without live resolution", as
   assert.ok(state.brandfetchCalls.every((c) => c.cachedOnly));
 });
 
-test("Brandfetch unavailable with stale cache serves cached response", async () => {
+test("Brandfetch unavailable with stale old-shape cache serves slimmed cached response", async () => {
   const dir = freshCacheDir();
   resetState();
-  // manually write a stale cache entry (8 days old)
-  const staleOutput = {
+  // manually write a stale cache entry in the OLD shape (8 days old),
+  // carrying fields the slimmed contract removed
+  const staleOldShapeOutput = {
     available: true,
     company_name: "Demo Co",
     domain: "demo.com",
     industry_hint: "retail",
     description: "A retail commerce and shopping company",
     tags: ["retail"],
-    positioning: RAW.positioning,
-    brand: RAW.brand,
+    positioning: { value_proposition: "We sell great products" },
+    brand: { voice: { summary: "Friendly" } },
     logo_url: "https://img.logo.dev/demo.com?token=pk_old",
     confidence: 1,
     cached: false,
@@ -214,7 +181,7 @@ test("Brandfetch unavailable with stale cache serves cached response", async () 
     join(dir, "demo.com.json"),
     JSON.stringify({
       fetched_at: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
-      output: staleOutput,
+      output: staleOldShapeOutput,
     }),
   );
   // point brandfetch to a closed port → unavailable
@@ -225,6 +192,12 @@ test("Brandfetch unavailable with stale cache serves cached response", async () 
   assert.equal(out.available, true);
   assert.equal(out.cached, true);
   assert.ok(out.message?.includes("stale"));
+  assert.equal(out.company_name, "Demo Co");
+  // removed fields from the old entry must not leak into the response
+  assertSlimContract(out as unknown as Record<string, unknown>);
+  // fields added after the old entry was written degrade to null
+  assert.equal(out.tagline, null);
+  assert.equal(out.mission, null);
 });
 
 test("Brandfetch unavailable with no cache returns graceful unavailable", async () => {
@@ -236,19 +209,7 @@ test("Brandfetch unavailable with no cache returns graceful unavailable", async 
   assert.equal(out.available, false);
   assert.equal(out.confidence, 0);
   assert.ok(typeof out.message === "string" && out.message.length > 0);
-  assert.equal(out.logo_url, null);
-});
-
-test("logo.dev unavailable returns null logo_url but context still returned", async () => {
-  freshCacheDir();
-  resetState();
-  state.logoFail = true;
-  const out = await lookupBrandContext({ domain: "demo.com" });
-  assert.equal(out.available, true);
-  assert.equal(out.logo_url, null);
-  assert.equal(out.company_name, "Demo Co");
-  assert.equal(out.industry_hint, "retail");
-  assert.ok(out.confidence >= 0.5);
+  assertSlimContract(out as unknown as Record<string, unknown>);
 });
 
 test("missing BRANDFETCH_API_KEY with uncached domain returns unavailable", async () => {
@@ -260,4 +221,13 @@ test("missing BRANDFETCH_API_KEY with uncached domain returns unavailable", asyn
   assert.equal(out.available, false);
   assert.equal(out.confidence, 0);
   assert.ok(out.message);
+});
+
+test("invalid domain returns unavailable without an API call", async () => {
+  freshCacheDir();
+  resetState();
+  const out = await lookupBrandContext({ domain: "not-a-domain" });
+  assert.equal(out.available, false);
+  assert.match(out.message ?? "", /Invalid domain/);
+  assert.equal(state.brandfetchCalls.length, 0);
 });

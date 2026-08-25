@@ -22,7 +22,7 @@ for (const domain of domains) {
     if (out.available) {
       ok++;
       console.log(
-        `OK    ${domain} — name="${out.company_name}" hint=${out.industry_hint} conf=${out.confidence} logo=${out.logo_url ? "yes" : "null"} cached=${out.cached}`,
+        `OK    ${domain} — name="${out.company_name}" hint=${out.industry_hint} conf=${out.confidence} cached=${out.cached}`,
       );
     } else {
       console.log(`MISS  ${domain} — ${out.message}`);
