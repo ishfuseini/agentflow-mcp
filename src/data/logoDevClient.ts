@@ -27,8 +27,11 @@ interface RawCandidate {
   logo_url?: unknown;
 }
 
-const toCandidate = (raw: RawCandidate): BrandSearchCandidate | null =>
-  typeof raw.name === "string" && typeof raw.domain === "string" && typeof raw.logo_url === "string"
+const toCandidate = (raw: RawCandidate | null): BrandSearchCandidate | null =>
+  raw &&
+  typeof raw.name === "string" &&
+  typeof raw.domain === "string" &&
+  typeof raw.logo_url === "string"
     ? { name: raw.name, domain: raw.domain, logo_url: raw.logo_url }
     : null;
 
@@ -47,7 +50,9 @@ export async function searchLogoDevBrands(
   if (opts.is_profane !== undefined) params.set("is_profane", String(opts.is_profane));
 
   try {
-    const res = await fetch(`${endpoint()}?${params}`, {
+    const url = new URL(endpoint());
+    url.search = params.toString();
+    const res = await fetch(url, {
       headers: { Authorization: `Bearer ${key}` },
       signal: AbortSignal.timeout(20_000),
     });

@@ -21,12 +21,13 @@ const SWEETGREEN = [
 let server: Server;
 let baseUrl: string;
 let lastQuery: URLSearchParams | null;
+let payload: unknown = SWEETGREEN;
 
 before(async () => {
   server = createServer((req, res) => {
     lastQuery = new URL(req.url ?? "", "http://localhost").searchParams;
     res.setHeader("content-type", "application/json");
-    res.end(JSON.stringify(SWEETGREEN));
+    res.end(JSON.stringify(payload));
   });
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
   const addr = server.address();
@@ -54,6 +55,32 @@ test("returns parsed candidates for Sweetgreen with strategy match", async () =>
   assert.ok(candidates[0].logo_url.startsWith("https://img.logo.dev/"));
   assert.equal(lastQuery?.get("q"), "Sweetgreen");
   assert.equal(lastQuery?.get("strategy"), "match");
+});
+
+test("appends is_profane query parameter when provided", async () => {
+  process.env.LOGO_DEV_SEARCH_API_ENDPOINT = baseUrl;
+  process.env.LOGO_DEV_SECRET_KEY = "test-key";
+
+  const candidates = await searchLogoDevBrands("swee", { is_profane: false });
+
+  assert.ok(candidates);
+  assert.equal(lastQuery?.get("q"), "swee");
+  assert.equal(lastQuery?.get("strategy"), "suggest");
+  assert.equal(lastQuery?.get("is_profane"), "false");
+});
+
+test("drops malformed candidates without failing the whole search", async () => {
+  process.env.LOGO_DEV_SEARCH_API_ENDPOINT = baseUrl;
+  process.env.LOGO_DEV_SECRET_KEY = "test-key";
+  payload = [null, { name: "NoDomain" }, SWEETGREEN[0]];
+  try {
+    const candidates = await searchLogoDevBrands("Sweetgreen", { strategy: "match" });
+
+    assert.ok(candidates);
+    assert.deepEqual(candidates, [SWEETGREEN[0]]);
+  } finally {
+    payload = SWEETGREEN;
+  }
 });
 
 test("returns null without making a call when the key is missing", async () => {

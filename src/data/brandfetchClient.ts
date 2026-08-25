@@ -52,11 +52,11 @@ export async function fetchBrandContext(
     if (!res.ok) {
       return { status: "error", message: `Brandfetch returned HTTP ${res.status}` };
     }
-    const context = (await res.json()) as RawBrandContext;
+    const context = (await res.json()) as Partial<RawBrandContext>;
     if (!context?.meta || !context.identity) {
       return { status: "error", message: "Brandfetch response missing required sections" };
     }
-    return { status: "ok", context };
+    return { status: "ok", context: context as RawBrandContext };
   } catch (err) {
     return { status: "error", message: `Brandfetch request failed: ${describe(err)}` };
   }
