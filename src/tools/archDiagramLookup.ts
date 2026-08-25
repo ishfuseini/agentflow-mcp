@@ -63,7 +63,7 @@ export function registerArchDiagramLookup(server: McpServer): void {
           ),
       }),
     },
-    withToolLogging("arch_diagram", (args: ArchDiagramInput) => ({
+    withToolLogging("arch_diagram", async (args: ArchDiagramInput) => ({
       content: [{ type: "text", text: JSON.stringify(lookupArchDiagram(args)) }],
     })),
   );

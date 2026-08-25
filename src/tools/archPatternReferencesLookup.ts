@@ -92,7 +92,7 @@ export function registerArchPatternReferencesLookup(server: McpServer): void {
           .describe('Original constraints, e.g. ["SAML SSO", "EU data residency"]'),
       }),
     },
-    withToolLogging("arch_pattern_references", (args: ArchPatternReferencesInput) => ({
+    withToolLogging("arch_pattern_references", async (args: ArchPatternReferencesInput) => ({
       content: [{ type: "text", text: JSON.stringify(lookupArchPatternReferences(args)) }],
     })),
   );
