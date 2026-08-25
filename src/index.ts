@@ -18,6 +18,7 @@ import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { logGelf } from "./logging/gelf.js";
 import { registerArchPatternLookup } from "./tools/archPatternLookup.js";
 import { registerBrandContextLookup } from "./tools/brandContextLookup.js";
+import { registerBrandSearchLookup } from "./tools/brandSearchLookup.js";
 import { registerRiskPolicyLookup } from "./tools/riskPolicyLookup.js";
 import { registerToolSelectionLookup } from "./tools/toolSelectionLookup.js";
 
@@ -39,6 +40,7 @@ export function createServer(): McpServer {
   registerToolSelectionLookup(server);
   registerRiskPolicyLookup(server);
   registerBrandContextLookup(server);
+  registerBrandSearchLookup(server);
   return server;
 }
 

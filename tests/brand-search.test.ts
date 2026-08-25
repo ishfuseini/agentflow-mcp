@@ -8,6 +8,7 @@ import assert from "node:assert/strict";
 import { createServer, type Server } from "node:http";
 import { after, before, test } from "node:test";
 import { searchLogoDevBrands } from "../src/data/logoDevClient.js";
+import { lookupBrandSearch } from "../src/tools/brandSearchLookup.js";
 
 const SWEETGREEN = [
   { name: "Sweetgreen", domain: "sweetgreen.com", logo_url: "https://img.logo.dev/sweetgreen.com" },
@@ -22,10 +23,12 @@ let server: Server;
 let baseUrl: string;
 let lastQuery: URLSearchParams | null;
 let payload: unknown = SWEETGREEN;
+let httpStatus = 200;
 
 before(async () => {
   server = createServer((req, res) => {
     lastQuery = new URL(req.url ?? "", "http://localhost").searchParams;
+    res.statusCode = httpStatus;
     res.setHeader("content-type", "application/json");
     res.end(JSON.stringify(payload));
   });
@@ -92,4 +95,47 @@ test("returns null without making a call when the key is missing", async () => {
 
   assert.equal(candidates, null);
   assert.equal(lastQuery, null);
+});
+
+// --- tool-level: graceful unavailable handling (task 3.2)
+
+test("tool returns unavailable without throwing when LOGO_DEV_SECRET_KEY is unset", async () => {
+  delete process.env.LOGO_DEV_SECRET_KEY;
+  lastQuery = null;
+
+  const output = await lookupBrandSearch({ query: "Sweetgreen", strategy: "match" });
+
+  assert.equal(output.available, false);
+  assert.deepEqual(output.candidates, []);
+  assert.match(output.message ?? "", /LOGO_DEV_SECRET_KEY/);
+  assert.equal(lastQuery, null); // no API call attempted
+});
+
+test("tool returns unavailable on logo.dev API error (401)", async () => {
+  process.env.LOGO_DEV_SEARCH_API_ENDPOINT = baseUrl;
+  process.env.LOGO_DEV_SECRET_KEY = "bad-key";
+  httpStatus = 401;
+  try {
+    const output = await lookupBrandSearch({ query: "Sweetgreen" });
+
+    assert.equal(output.available, false);
+    assert.deepEqual(output.candidates, []);
+    assert.equal(output.strategy, "suggest"); // default strategy
+    assert.match(output.message ?? "", /unavailable/);
+  } finally {
+    httpStatus = 200;
+  }
+});
+
+test("tool returns parsed candidates on success", async () => {
+  process.env.LOGO_DEV_SEARCH_API_ENDPOINT = baseUrl;
+  process.env.LOGO_DEV_SECRET_KEY = "test-key";
+
+  const output = await lookupBrandSearch({ query: "Sweetgreen", strategy: "match" });
+
+  assert.equal(output.available, true);
+  assert.equal(output.query, "Sweetgreen");
+  assert.equal(output.strategy, "match");
+  assert.equal(output.candidates.length, 2);
+  assert.equal(output.candidates[0]?.domain, "sweetgreen.com");
 });

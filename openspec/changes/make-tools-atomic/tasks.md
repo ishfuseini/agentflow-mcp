@@ -14,8 +14,8 @@
 
 ## 3. brand_search Tool
 
-- [ ] 3.1 Create `src/tools/brandSearchLookup.ts` exporting `registerBrandSearchLookup(server)` using `logoDevClient` and `BrandSearchInput`/`BrandSearchOutput`. Verify: the tool is registered in `src/index.ts` and `tsc --noEmit` passes.
-- [ ] 3.2 Add graceful-unavailable handling for missing `LOGO_DEV_SECRET_KEY` and API errors (401/400/unreachable). Verify: a unit test with the env var unset returns an unavailable response without throwing.
+- [x] 3.1 Create `src/tools/brandSearchLookup.ts` exporting `registerBrandSearchLookup(server)` using `logoDevClient` and `BrandSearchInput`/`BrandSearchOutput`. Verify: the tool is registered in `src/index.ts` and `tsc --noEmit` passes.
+- [x] 3.2 Add graceful-unavailable handling for missing `LOGO_DEV_SECRET_KEY` and API errors (401/400/unreachable). Verify: a unit test with the env var unset returns an unavailable response without throwing.
 
 ## 4. brand_context_lookup Modifications
 
