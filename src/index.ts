@@ -16,7 +16,9 @@ import { toNodeHandler } from "@modelcontextprotocol/node";
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { logGelf } from "./logging/gelf.js";
+import { registerArchDiagramLookup } from "./tools/archDiagramLookup.js";
 import { registerArchPatternLookup } from "./tools/archPatternLookup.js";
+import { registerArchPatternReferencesLookup } from "./tools/archPatternReferencesLookup.js";
 import { registerBrandContextLookup } from "./tools/brandContextLookup.js";
 import { registerBrandSearchLookup } from "./tools/brandSearchLookup.js";
 import { registerRiskPolicyLookup } from "./tools/riskPolicyLookup.js";
@@ -37,6 +39,8 @@ export function createServer(): McpServer {
     version: "0.1.0",
   });
   registerArchPatternLookup(server);
+  registerArchDiagramLookup(server);
+  registerArchPatternReferencesLookup(server);
   registerToolSelectionLookup(server);
   registerRiskPolicyLookup(server);
   registerBrandContextLookup(server);

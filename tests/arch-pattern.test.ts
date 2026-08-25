@@ -49,11 +49,8 @@ test("agency scenario matches media_agency_audience_measurement", () => {
   );
   assert.ok(out.data_zones.includes("bronze"));
   assert.ok(out.integration_notes.some((n) => /tenant/i.test(n)));
-  // curated match carries diagram data (task 3.5)
-  assert.ok(out.diagram_data);
-  assert.ok(out.diagram_data.components.length > 0);
-  assert.ok(out.diagram_data.connections.length > 0);
-  assert.ok(out.diagram_data.boundaries.length > 0);
+  // diagram data moved to the arch_diagram tool — absent here by default
+  assert.ok(!("diagram_data" in out));
 });
 
 test("healthcare scenario matches healthcare_patient_insights", () => {
@@ -83,7 +80,8 @@ test("unknown industry falls back with low confidence and no diagram", () => {
   });
   assert.ok(out.confidence < 0.5, `confidence ${out.confidence}`);
   assert.ok(out.pattern_id.length > 0);
-  assert.ok(!out.diagram_data);
+  assert.ok(!("diagram_data" in out));
+  assert.ok(!("source_references" in out));
   assert.equal(typeof out.architecture_summary, "string");
 });
 
@@ -102,11 +100,15 @@ test("every response includes required schema fields", () => {
     assert.ok(Array.isArray(out.data_zones));
     assert.ok(Array.isArray(out.integration_notes));
     assert.ok(out.confidence >= 0 && out.confidence <= 1);
+    // source_references and diagram_data moved to dedicated tools
+    assert.ok(!("source_references" in out));
+    assert.ok(!("diagram_data" in out));
   }
 });
 
-test("curated matches cite source references", () => {
+test("curated matches omit source_references and diagram_data by default", () => {
   const out = lookupArchPattern(agency);
   assert.ok(out.confidence >= 0.85);
-  assert.ok(out.source_references && out.source_references.length > 0);
+  assert.ok(!("source_references" in out));
+  assert.ok(!("diagram_data" in out));
 });

@@ -3,9 +3,13 @@
  *
  * Deterministic, rules-based matching over the source pack index:
  * industry match (40%) -> data stack overlap (30%) -> constraint coverage (30%).
- * Curated matches (confidence >= 0.85) include diagram_data and source
- * references; weak matches fall back to a generic enterprise AI POC pattern
- * with confidence < 0.5 and no diagram.
+ * Curated matches score confidence >= 0.85; weak matches fall back to a generic
+ * enterprise AI POC pattern with confidence < 0.5.
+ *
+ * The response carries only the core pattern fields. diagram_data and
+ * source_references moved to the independent arch_diagram and
+ * arch_pattern_references tools; the sourceReferences helper is exported for
+ * arch_pattern_references to re-run scoring against the original ask.
  */
 import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
@@ -58,8 +62,8 @@ export function scorePattern(
   };
 }
 
-/** Source pack entries that informed the match (task 3.6). */
-function sourceReferences(
+/** Source pack entries that informed the match — used by arch_pattern_references. */
+export function sourceReferences(
   input: ArchPatternLookupInput,
   index: SourceIndex,
   patternEntry?: SourceEntry,
@@ -116,7 +120,6 @@ export function lookupArchPattern(input: ArchPatternLookupInput): ArchPatternLoo
     return {
       ...FALLBACK_PATTERN,
       confidence: Math.round(fallbackConfidence * 1000) / 1000,
-      source_references: sourceReferences(input, index),
     };
   }
 
@@ -129,8 +132,6 @@ export function lookupArchPattern(input: ArchPatternLookupInput): ArchPatternLoo
     data_zones: best.fm.data_zones,
     integration_notes: p.integration_notes,
     confidence: Math.round(confidence * 1000) / 1000,
-    ...(p.diagram_data ? { diagram_data: p.diagram_data } : {}),
-    source_references: sourceReferences(input, index, best),
   };
 }
 
@@ -140,8 +141,9 @@ export function registerArchPatternLookup(server: McpServer): void {
     {
       description:
         "Match an enterprise ask (industry, data stack, cloud, constraints) to a curated " +
-        "reference architecture pattern with components, data zones, integration notes, " +
-        "confidence, and diagram-ready data.",
+        "reference architecture pattern with components, data zones, integration notes, and " +
+        "confidence. Use arch_diagram for diagram data and arch_pattern_references for source " +
+        "citations — both independent tools callable at any time.",
       inputSchema: z.object({
         industry: z
           .string()

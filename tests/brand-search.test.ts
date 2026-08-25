@@ -127,6 +127,21 @@ test("tool returns unavailable on logo.dev API error (401)", async () => {
   }
 });
 
+test("tool returns empty candidates (available) when nothing matches", async () => {
+  process.env.LOGO_DEV_SEARCH_API_ENDPOINT = baseUrl;
+  process.env.LOGO_DEV_SECRET_KEY = "test-key";
+  payload = [];
+  try {
+    const output = await lookupBrandSearch({ query: "zz-no-such-brand" });
+
+    assert.equal(output.available, true);
+    assert.deepEqual(output.candidates, []);
+    assert.equal(output.strategy, "suggest");
+  } finally {
+    payload = SWEETGREEN;
+  }
+});
+
 test("tool returns parsed candidates on success", async () => {
   process.env.LOGO_DEV_SEARCH_API_ENDPOINT = baseUrl;
   process.env.LOGO_DEV_SECRET_KEY = "test-key";
