@@ -8,31 +8,17 @@ Retrieve rich company context — identity, positioning, brand voice/style from 
 
 ### Requirement: Company context retrieval
 
-The system SHALL accept a domain name and return a structured company context including company name, description, tags, positioning, and brand voice/style, sourced from the Brandfetch Brand Context API (`GET https://api.brandfetch.io/v2/context/{domain}`, Bearer auth).
+The system SHALL accept a domain name and return a structured company context sourced from the `identity` section of the Brandfetch Brand Context API (`GET https://api.brandfetch.io/v2/context/{domain}`, Bearer auth): company name, tagline, mission, description, and tags. The system SHALL NOT include positioning data, brand voice/style, or logo retrieval in this tool. The tool accepts a domain directly; it does not require a domain resolved by another tool.
 
 #### Scenario: Known domain lookup
 
 - **WHEN** the tool receives domain "havas.com"
-- **THEN** the system returns company_name "Havas", domain "havas.com", description of the company, tags characterizing the brand, positioning including value_proposition and target_audience, brand voice and style summaries, logo_url from logo.dev, and confidence >= 0.80
+- **THEN** the system returns company_name "Havas", domain "havas.com", tagline, mission, description of the company, tags characterizing the brand, and confidence >= 0.80
 
 #### Scenario: Industry hint derived from tags
 
 - **WHEN** the tool receives a domain and the Brandfetch response includes tags
 - **THEN** the system maps the tags to an industry_hint aligned with the source pack's industry codes (e.g., "media_agency", "healthcare", "retail", "financial_services")
-
-### Requirement: Logo retrieval via logo.dev
-
-The system SHALL retrieve the company logo URL from logo.dev (`GET https://api.logo.dev/brand/{domain}`) and include it in the response as `logo_url`. The logo URL is cached locally alongside the Brandfetch context.
-
-#### Scenario: Logo retrieved successfully
-
-- **WHEN** the tool receives a domain and logo.dev is available
-- **THEN** the system returns a logo_url pointing to the company logo image
-
-#### Scenario: logo.dev unavailable
-
-- **WHEN** logo.dev is unreachable or returns an error
-- **THEN** the system returns logo_url as null or omits the field, without causing a tool error; the remaining brand context from Brandfetch is still returned if available
 
 ### Requirement: Layered caching with cachedOnly mode
 
@@ -55,7 +41,7 @@ The system SHALL cache Brandfetch responses using two layers: (1) the Brandfetch
 
 ### Requirement: Graceful fallback when Brandfetch unavailable
 
-The system SHALL return cached context or a graceful unavailable response when the Brandfetch API or logo.dev is unreachable, returns an error, or returns HTTP 429 (quota exceeded).
+The system SHALL return cached context or a graceful unavailable response when the Brandfetch API is unreachable, returns an error, or returns HTTP 429 (quota exceeded).
 
 #### Scenario: Brandfetch unavailable with cached response
 
@@ -69,12 +55,12 @@ The system SHALL return cached context or a graceful unavailable response when t
 
 ### Requirement: Structured JSON output
 
-The system SHALL return a JSON object containing company_name, domain, industry_hint, description, tags, positioning, brand, logo_url, and confidence for successful lookups.
+The system SHALL return a JSON object containing company_name, domain, industry_hint, tagline, mission, description, tags, and confidence for successful lookups. The system SHALL NOT include `positioning`, `brand` (voice/style), or `logo_url` fields in the response.
 
 #### Scenario: Response schema compliance
 
 - **WHEN** the tool returns a successful brand context lookup
-- **THEN** the response includes all required fields: company_name (string), domain (string), industry_hint (string), description (string), tags (array of strings), positioning (object with value_proposition, target_audience, products_and_services), brand (object with voice and style), logo_url (string or null, from logo.dev), and confidence (number between 0 and 1)
+- **THEN** the response includes all required fields: company_name (string), domain (string), industry_hint (string), tagline (string), mission (string), description (string), tags (array of strings), and confidence (number between 0 and 1), and does NOT include positioning, brand, or logo_url fields
 
 #### Scenario: Unavailable response schema
 
@@ -83,7 +69,7 @@ The system SHALL return a JSON object containing company_name, domain, industry_
 
 ### Requirement: API key via environment variable
 
-The system SHALL read the Brandfetch API key from the `BRANDFETCH_API_KEY` environment variable for Brand Context API calls, and the logo.dev secret key from `LOGO_DEV_SECRET_KEY` for logo retrieval.
+The system SHALL read the Brandfetch API key from the `BRANDFETCH_API_KEY` environment variable for Brand Context API calls.
 
 #### Scenario: API key present
 
