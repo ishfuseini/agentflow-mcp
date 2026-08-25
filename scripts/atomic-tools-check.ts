@@ -55,7 +55,7 @@ assert.equal(brandSearch.strategy, "match");
 assert.ok(Array.isArray(brandSearch.candidates));
 assert.equal(typeof brandSearch.available, "boolean");
 console.log(
-  `PASS brand_search — available=${brandSearch.available} candidates=${(brandSearch.candidates as unknown[]).length}`,
+  `PASS brand_search — available=${String(brandSearch.available)} candidates=${(brandSearch.candidates as unknown[]).length}`,
 );
 
 // brand_context_lookup — identity only, no removed fields
