@@ -1,45 +1,66 @@
 /**
- * logo.dev Brand API client (task 6.3).
+ * logo.dev Brand Search API client.
  *
- * GET {endpoint}/{domain} with Bearer LOGO_DEV_SECRET_KEY. The 200 response's
- * `logo` field is a ready-to-embed CDN URL (it embeds the publishable key).
- * 202 means the domain is still being indexed — retry once after a short wait.
- * Any failure returns null: the brand context is still useful without a logo.
+ * GET {endpoint}?q={name}&strategy={suggest|match}&is_profane={bool} with
+ * Bearer LOGO_DEV_SECRET_KEY. Returns ranked brand candidates, each with a
+ * name, canonical domain, and a ready-to-embed CDN logo URL.
  *
- * Docs: https://www.logo.dev/docs/brand/introduction
+ * Returns null on any failure (missing key, 401/400, unreachable): callers
+ * distinguish "unavailable" (null) from "no matches" ([]) and degrade
+ * gracefully. Docs: https://www.logo.dev/docs/search/introduction
  */
-const endpoint = (): string =>
-  process.env.LOGO_DEV_BRAND_API_ENDPOINT ?? "https://api.logo.dev/brand";
+import type { BrandSearchCandidate } from "../types/brand-search.js";
 
-export interface LogoDevBrand {
-  name?: string;
-  logo?: string;
+const endpoint = (): string =>
+  process.env.LOGO_DEV_SEARCH_API_ENDPOINT ?? "https://api.logo.dev/search";
+
+export interface LogoDevSearchOptions {
+  /** "suggest" (default) for popular prefix matches, "match" for exact/near-exact first. */
+  strategy?: "suggest" | "match";
+  /** When false, excludes brands flagged as potentially inappropriate. */
+  is_profane?: boolean;
 }
 
-/** Returns the company name and embeddable logo URL, or null on any failure. */
-export async function fetchLogoDevBrand(domain: string): Promise<LogoDevBrand | null> {
+interface RawCandidate {
+  name?: unknown;
+  domain?: unknown;
+  logo_url?: unknown;
+}
+
+const toCandidate = (raw: RawCandidate | null): BrandSearchCandidate | null =>
+  raw &&
+  typeof raw.name === "string" &&
+  typeof raw.domain === "string" &&
+  typeof raw.logo_url === "string"
+    ? { name: raw.name, domain: raw.domain, logo_url: raw.logo_url }
+    : null;
+
+/**
+ * Search logo.dev for brands matching a company name query.
+ * Returns parsed candidates ([] when nothing matches), or null on any failure.
+ */
+export async function searchLogoDevBrands(
+  query: string,
+  opts: LogoDevSearchOptions = {},
+): Promise<BrandSearchCandidate[] | null> {
   const key = process.env.LOGO_DEV_SECRET_KEY;
   if (!key) return null;
 
-  for (let attempt = 0; attempt < 2; attempt++) {
-    try {
-      const res = await fetch(`${endpoint()}/${encodeURIComponent(domain)}`, {
-        headers: { Authorization: `Bearer ${key}` },
-        signal: AbortSignal.timeout(20_000),
-      });
-      if (res.status === 202) {
-        // Still indexing — one retry after a pause, then give up gracefully.
-        if (attempt === 0) {
-          await new Promise((r) => setTimeout(r, 3_000));
-          continue;
-        }
-        return null;
-      }
-      if (!res.ok) return null;
-      return (await res.json()) as LogoDevBrand;
-    } catch {
-      return null;
-    }
+  const params = new URLSearchParams({ q: query, strategy: opts.strategy ?? "suggest" });
+  if (opts.is_profane !== undefined) params.set("is_profane", String(opts.is_profane));
+
+  try {
+    const url = new URL(endpoint());
+    url.search = params.toString();
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(20_000),
+    });
+    if (!res.ok) return null;
+    const raw = (await res.json()) as RawCandidate[];
+    if (!Array.isArray(raw)) return null;
+    return raw.map(toCandidate).filter((c): c is BrandSearchCandidate => c !== null);
+  } catch {
+    return null;
   }
-  return null;
 }
